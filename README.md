@@ -1,4 +1,4 @@
-# project
+# Warmaster - Role Playing Game 
 
 ## Project setup
 ```

@@ -1,8 +1,14 @@
 <template>
     <div class="content" :style="{ backgroundImage: `url(${backgroundUrl})` }">
+        <div class="box-shadow"></div>
         <div class="map-container">
             <div class="map-container__inner" :style="{ backgroundImage: `url(${backgroundMap})` }">
                 <NorthForest />
+                <MageHouse />
+                <Horinis />
+                <GeorgFarm />
+                <FoggyHollow />
+                <FridrickFarm />
             </div>
             <Hero />
             <HeroInfoBar />
@@ -11,7 +17,15 @@
 </template>
 
 <script>
+// Места на карте *
 import NorthForest from '@/components/MapPlaces/NorthForest.vue';
+import MageHouse from '@/components/MapPlaces/MageHouse.vue';
+import Horinis from '@/components/MapPlaces/Horinis.vue';
+import GeorgFarm from '@/components/MapPlaces/GeorgFarm.vue';
+import FoggyHollow from '@/components/MapPlaces/FoggyHollow.vue';
+import FridrickFarm from '@/components/MapPlaces/FridrickFarm.vue';
+
+// Герой *
 import Hero from '@/components/Hero/Hero.vue';
 import HeroInfoBar from '@/components/Hero/HeroInfoBar.vue';
 // Фоновые картинки *
@@ -23,7 +37,12 @@ export default {
     components: {
         NorthForest,
         Hero,
-        HeroInfoBar
+        HeroInfoBar,
+        MageHouse,
+        Horinis,
+        GeorgFarm,
+        FoggyHollow,
+        FridrickFarm
     },
     data() {
         return {
@@ -42,6 +61,14 @@ export default {
     align-items: center;
     background-size: cover;
     height: 100%;
+}
+.box-shadow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
 }
 .map-container {
     display: -webkit-flex;
