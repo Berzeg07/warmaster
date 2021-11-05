@@ -6,6 +6,7 @@
 
 <script>
 import Tooltip from '@/components/Buttons/Tooltip.vue';
+
 export default {
     name: 'MageHouse',
     components: {

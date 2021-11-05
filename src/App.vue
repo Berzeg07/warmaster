@@ -82,4 +82,17 @@ textarea {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.modal.modalshow {
+  display: block;
+  animation: fade 0.5s forwards ease-in-out;
+}
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 </style>

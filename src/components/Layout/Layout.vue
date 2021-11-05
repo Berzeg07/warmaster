@@ -9,15 +9,18 @@
                 <GeorgFarm />
                 <FoggyHollow />
                 <FridrickFarm />
+                <Introduction />
             </div>
+            <Overlay />
             <Hero />
             <HeroInfoBar />
         </div>
+        <DialogueScene />
     </div>
 </template>
 
 <script>
-// Места на карте *
+// Объекты на карте *
 import NorthForest from '@/components/MapPlaces/NorthForest.vue';
 import MageHouse from '@/components/MapPlaces/MageHouse.vue';
 import Horinis from '@/components/MapPlaces/Horinis.vue';
@@ -25,12 +28,23 @@ import GeorgFarm from '@/components/MapPlaces/GeorgFarm.vue';
 import FoggyHollow from '@/components/MapPlaces/FoggyHollow.vue';
 import FridrickFarm from '@/components/MapPlaces/FridrickFarm.vue';
 
+// Всплывающие сцены *
+import Introduction from '@/components/Scenes/Introduction.vue';
+import DialogueScene from '@/components/Scenes/DialogueScene.vue';
+
+// Затемнение фона *
+import Overlay from '@/components/Overlay/Overlay.vue';
+
 // Герой *
 import Hero from '@/components/Hero/Hero.vue';
 import HeroInfoBar from '@/components/Hero/HeroInfoBar.vue';
+
 // Фоновые картинки *
 import backgroundUrl from "@/assets/img/bg-main.jpg";
 import backgroundMap from "@/assets/img/map.png";
+
+// Vuex *
+// import { mapGetters } from 'vuex'
 
 export default {
     name: 'layout',
@@ -42,7 +56,10 @@ export default {
         Horinis,
         GeorgFarm,
         FoggyHollow,
-        FridrickFarm
+        FridrickFarm,
+        Overlay,
+        Introduction,
+        DialogueScene
     },
     data() {
         return {
@@ -50,6 +67,11 @@ export default {
             backgroundMap,
         };
     },
+    // computed: {
+    //     ...mapGetters([
+    //         'OVERLAY_STATE'
+    //     ])
+    // },
 }
 </script>
 
@@ -62,6 +84,7 @@ export default {
     background-size: cover;
     height: 100%;
 }
+
 .box-shadow {
     position: absolute;
     left: 0;
