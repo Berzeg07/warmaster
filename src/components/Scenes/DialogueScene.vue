@@ -8,13 +8,18 @@
         <div class="modal-inner">
             <div class="dialogue">
                 <p class="dialogue_article" id="dialogue">
-                    <b>{{ startText[0].npcName }}:</b>
-                    {{ startText[0].textNPC }}
+                    <b>{{ npcName + ':' + ' ' }}</b>
+                    <span>{{ npcComment }}</span>
                 </p>
                 <div class="btn-block btn-block_dialogue">
-                    <ul class="link-list" id="link_list">
+                    <ul class="link-list">
                         <!-- Пункты диалога -->
-                        <li v-for="item in startText[0].action" :key="item.message">- {{ item }}</li>
+                        <li
+                            @click="listClick"
+                            v-for="(item, index) in heroComments"
+                            :key="item.message"
+                            :counter="index"
+                        >- {{ item }}</li>
                     </ul>
                 </div>
             </div>
@@ -25,6 +30,7 @@
 <script>
 // Фоновые картинки *
 import sceneImage from "@/assets/img/mage-loc.jpg";
+import { textContent } from '@/datacontent/content';
 
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -32,30 +38,38 @@ export default {
     data() {
         return {
             modalShow: 'modalshow',
-            // sceneImage,
+            dialogueLevel: 0,
+            npcName: '',
+            npcComment: '',
             sceneClasses: {
                 runolvIntro: sceneImage
             },
-            startText: [],
-            textContent: {
-                textObjRunolv: [{
-                    npcName: 'Рунольв',
-                    textNPC: 'Ты спал два дня, я смог вытащить тебя из под завала, камнями завалило половину перевала. Ты получил сильный удар по голове, но нам повезло. Как ты себя чувствуешь?',
-                    action: ['Голова гудит, в целом не плохо, кто ты?', 'Как ты спас меня?', 'Я не помню куда шел, что это за место?', 'Мои вещи целы? У меня было оружие и походный мешок', 'Как быть дальше?'],
-                    answearsNPC: {
-                        0: 'я маг круга огня, наш монастырь выше в горах, не далеко от того перевала где ты проходил. Узкий проход между двумя скалами завалил камнепад, теперь я отрезан от свой обители. Мастера наверняка уже готовят ритуал, чтобы расчистить завал, но нужно быть осторожным, чтобы не вызвать повторный обвал камней, подготовка займет не одну неделю, пока я буду здесь',
-                        1: 'я собирал в тех местах особую траву. Когда услышал грохот, то бежал со всех ног, камнепад не редкое явление в этих горах. Когда шум прекратился, я пошел посмотреть на последствия и обнаружил тебя, ты получил сильный удар по голове и чудом избежал погребения',
-                        2: 'полуостров Хейдмарк, долина портового города Хэртланд. В моем доме ты можешь оставаться сколько тебе угодно',
-                        3: 'я ничего не нашел возле тебя, вероятно ты бросил все, чтобы суметь уйти от комнепада и скажу тебе это удалось'
-                    }
-                }, {
-                    textNPC: 'ты можешь остаться здесь или осмотреться в городе, будь осторожнее, в лесу водятся опасные твари. Не могу оставить тебя с пустыми руками, можешь взять кошелек на столе, там 100 монет, хватит на первое время',
-                    action: ['Назад', 'Уйти']
-                }],
-            }
+            heroComments: [],
+            // textContent: {
+            //     textObjRunolv: [{
+            //         npcName: 'Рунольв',
+            //         textNPC: 'Ты спал два дня, я смог вытащить тебя из под завала, камнями завалило половину перевала. Ты получил сильный удар по голове, но нам повезло. Как ты себя чувствуешь?',
+            //         action: ['Голова гудит, в целом не плохо, кто ты?', 'Как ты спас меня?', 'Я не помню куда шел, что это за место?', 'Мои вещи целы? У меня было оружие и походный мешок', 'Как быть дальше?'],
+            //         answearsNPC: {
+            //             0: 'я маг круга огня, наш монастырь выше в горах, не далеко от того перевала где ты проходил. Узкий проход между двумя скалами завалил камнепад, теперь я отрезан от свой обители. Мастера наверняка уже готовят ритуал, чтобы расчистить завал, но нужно быть осторожным, чтобы не вызвать повторный обвал камней, подготовка займет не одну неделю, пока я буду здесь',
+            //             1: 'я собирал в тех местах особую траву. Когда услышал грохот, то бежал со всех ног, камнепад не редкое явление в этих горах. Когда шум прекратился, я пошел посмотреть на последствия и обнаружил тебя, ты получил сильный удар по голове и чудом избежал погребения',
+            //             2: 'полуостров Хейдмарк, долина портового города Хэртланд. В моем доме ты можешь оставаться сколько тебе угодно',
+            //             3: 'я ничего не нашел возле тебя, вероятно ты бросил все, чтобы суметь уйти от комнепада и скажу тебе это удалось'
+            //         }
+            //     }, {
+            //         textNPC: 'ты можешь остаться здесь или осмотреться в городе, будь осторожнее, в лесу водятся опасные твари. Не могу оставить тебя с пустыми руками, можешь взять кошелек на столе, там 100 монет, хватит на первое время',
+            //         action: ['Назад', 'Уйти']
+            //     }],
+            // }
         }
     },
-
+    mounted() {
+        // var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+        // if()
+        this.npcName = textContent.textObjRunolv[this.dialogueLevel].npcName;
+        this.npcComment = textContent.textObjRunolv[this.dialogueLevel].textNPC;
+        this.heroComments = textContent.textObjRunolv[this.dialogueLevel].action;
+    },
     computed: {
         ...mapGetters([
             'RUNOLV_SCENE_STATE'
@@ -66,7 +80,7 @@ export default {
 
         checkModalState() {
             return this.MODAL_SHOW_STATE == true ? this.modalShow : '';
-        },
+        }
     },
     methods: {
         ...mapActions([
@@ -74,15 +88,20 @@ export default {
         ]),
         sceneClassAdd() {
             if (this.RUNOLV_SCENE_STATE) {
-                this.startText = this.textContent.textObjRunolv;
+                // this.npcName = textContent.textObjRunolv[this.dialogueLevel].npcName;
+                // this.npcComment = textContent.textObjRunolv[this.dialogueLevel].textNPC;
+                // this.heroComments = textContent.textObjRunolv[this.dialogueLevel].action;
                 return this.sceneClasses.runolvIntro;
             }
         },
-        // showStartingText() {
-        //     if (this.RUNOLV_SCENE_STATE) {
-        //         return this.textContent.textObjRunolv;
-        //     }
-        // }
+        listClick(e) {
+            var target = e.currentTarget.getAttribute('counter');
+            if (this.RUNOLV_SCENE_STATE) {
+                if (target != 4) {
+                    this.npcComment = textContent.textObjRunolv[this.dialogueLevel].answearsNPC[target];
+                }
+            }
+        }
     }
 }
 </script>

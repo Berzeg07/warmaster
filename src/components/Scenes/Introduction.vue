@@ -16,6 +16,7 @@
 <script>
 import Button from '@/components/Buttons/Button.vue';
 import image from "@/assets/img/bg-main.jpg";
+import { dataBase } from '@/database/database';
 import { mapActions } from 'vuex'
 
 export default {
@@ -26,18 +27,31 @@ export default {
     data() {
         return {
             isShowIntro: true,
-            image
+            image,
+            gameData: {}
         };
     },
     mounted() {
         // Отключаем стораж **** 
-        localStorage.clear();
+        // localStorage.clear();
         // !!!!!!!!
 
+        console.log(localStorage.getItem('gameData'));
+
+        // Заносим в locale storage первичную структуру базы данных *
+        if (localStorage.getItem('gameData') == null) {
+            var serialDataBase = JSON.stringify(dataBase);
+            localStorage.setItem("gameData", serialDataBase);
+        }
+
+        // Получаем данные *
         var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+        this.gameData = gameDataResponse;
+
+        // Проверка на стартовый экран *
         if (gameDataResponse) {
-            var checkIntro = gameDataResponse.intro;
-            if (checkIntro) {
+            var checkIntro = gameDataResponse.gameSceneCurrent;
+            if (checkIntro != 'intro') {
                 this.OVERLAY_HIDE_ACT();
                 this.isShowIntro = false;
             }
@@ -45,19 +59,19 @@ export default {
     },
     methods: {
         ...mapActions([
-            // 'OVERLAY_HIDE_ACT',
+            'OVERLAY_HIDE_ACT',
             'RUNOLV_SCENE_ACT',
             'MODAL_SHOW_ACT'
         ]),
         btnClick() {
             this.isShowIntro = false;
-            // this.OVERLAY_HIDE_ACT();
             this.RUNOLV_SCENE_ACT();
             this.MODAL_SHOW_ACT();
-            var gameData = {}
-            gameData.intro = true;
-            var serialObj = JSON.stringify(gameData);
-            localStorage.setItem("gameData", serialObj);
+            // Переход на сцену с Магом, сохранение данных в базе *
+            this.gameData.gameSceneCurrent = 'runolv';
+            var serialDataBase = JSON.stringify(this.gameData);
+            localStorage.setItem("gameData", serialDataBase);
+            console.log(this.gameData);
         }
     }
 }
