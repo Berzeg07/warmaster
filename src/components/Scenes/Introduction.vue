@@ -33,7 +33,7 @@ export default {
     },
     mounted() {
         // Отключаем стораж **** 
-        // localStorage.clear();
+        localStorage.clear();
         // !!!!!!!!
 
         console.log(localStorage.getItem('gameData'));
@@ -71,7 +71,7 @@ export default {
             this.gameData.gameSceneCurrent = 'runolv';
             var serialDataBase = JSON.stringify(this.gameData);
             localStorage.setItem("gameData", serialDataBase);
-            console.log(this.gameData);
+            console.log(this.gameData.gameSceneCurrent);
         }
     }
 }

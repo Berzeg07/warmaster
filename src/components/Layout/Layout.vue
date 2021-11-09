@@ -15,7 +15,7 @@
             <Hero />
             <HeroInfoBar />
         </div>
-        <DialogueScene />
+        <DialogueScene v-if="MODAL_SHOW_STATE" :class="checkModalState" />
     </div>
 </template>
 
@@ -44,7 +44,8 @@ import backgroundUrl from "@/assets/img/bg-main.jpg";
 import backgroundMap from "@/assets/img/map.png";
 
 // Vuex *
-// import { mapGetters } from 'vuex'
+// import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'layout',
@@ -63,15 +64,23 @@ export default {
     },
     data() {
         return {
+            modalShow: 'modalshow',
             backgroundUrl,
             backgroundMap,
         };
     },
-    // computed: {
-    //     ...mapGetters([
-    //         'OVERLAY_STATE'
-    //     ])
-    // },
+    computed: {
+        // ...mapGetters([
+        //     'RUNOLV_SCENE_STATE'
+        // ]),
+        ...mapGetters([
+            'MODAL_SHOW_STATE'
+        ]),
+
+        checkModalState() {
+            return this.MODAL_SHOW_STATE == true ? this.modalShow : '';
+        }
+    }
 }
 </script>
 
