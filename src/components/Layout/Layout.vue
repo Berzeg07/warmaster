@@ -9,7 +9,7 @@
                 <GeorgFarm />
                 <FoggyHollow />
                 <FridrickFarm />
-                <Introduction />
+                <Introduction v-if="isShowIntro" @hideIntro="hideIntro" />
             </div>
             <Overlay />
             <Hero />
@@ -20,6 +20,9 @@
 </template>
 
 <script>
+// Стартовый объект базы данных *
+import { dataBase } from '@/database/database';
+
 // Объекты на карте *
 import NorthForest from '@/components/MapPlaces/NorthForest.vue';
 import MageHouse from '@/components/MapPlaces/MageHouse.vue';
@@ -44,8 +47,7 @@ import backgroundUrl from "@/assets/img/bg-main.jpg";
 import backgroundMap from "@/assets/img/map.png";
 
 // Vuex *
-// import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'layout',
@@ -65,20 +67,53 @@ export default {
     data() {
         return {
             modalShow: 'modalshow',
+            isShowIntro: true,
             backgroundUrl,
             backgroundMap,
         };
     },
+    mounted() {
+        // Очистка базы для отладки **************** !!!
+        localStorage.clear();
+
+        // Заносим в locale storage первичную структуру базы данных *
+        if (localStorage.getItem('gameData') == null) {
+            var serialDataBase = JSON.stringify(dataBase);
+            localStorage.setItem("gameData", serialDataBase);
+        }
+        // Получаем данные *
+        var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+        console.log(gameDataResponse.gameSceneCurrent)
+        // Проверка на стартовый экран и состояние текущей сцены *
+        if (gameDataResponse.gameSceneCurrent != 'intro') {
+            this.isShowIntro = false;
+            this.OVERLAY_HIDE_ACT();
+            if (gameDataResponse.gameSceneCurrent != null) {
+                if (this.MODAL_SHOW_STATE != true) {
+                    this.OVERLAY_SHOW_ACT();
+                    this.MODAL_SHOW_ACT();
+                }
+            }
+        }
+    },
     computed: {
-        // ...mapGetters([
-        //     'RUNOLV_SCENE_STATE'
-        // ]),
         ...mapGetters([
-            'MODAL_SHOW_STATE'
+            'MODAL_SHOW_STATE',
+            'OVERLAY_STATE'
         ]),
 
         checkModalState() {
             return this.MODAL_SHOW_STATE == true ? this.modalShow : '';
+        }
+    },
+    methods: {
+        ...mapActions([
+            'OVERLAY_HIDE_ACT',
+            'OVERLAY_SHOW_ACT',
+            'MODAL_SHOW_ACT'
+        ]),
+        hideIntro(data) {
+            this.isShowIntro = data.intro;
         }
     }
 }
@@ -93,7 +128,6 @@ export default {
     background-size: cover;
     height: 100%;
 }
-
 .box-shadow {
     position: absolute;
     left: 0;

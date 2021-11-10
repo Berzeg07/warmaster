@@ -1,16 +1,14 @@
 <template>
-    <div class="modal modal-loc" :style="{ backgroundImage: `url(${sceneData()})` }">
+    <div class="modal modal-loc" :style="{ backgroundImage: `url(${sceneData})` }">
         <div class="modal-inner">
             <div class="dialogue">
                 <p class="dialogue_article" id="dialogue">
                     <b>{{ npcName + ':' + ' ' }}</b>
                     <span>{{ npcComment }}</span>
                 </p>
-                <!-- <p>{{ testArr[testIndex] }}</p>
-                <button @click="testFunc">смена</button>-->
                 <div class="btn-block btn-block_dialogue">
                     <ul class="link-list">
-                        <!-- Пункты диалога -->
+                        <!-- Комментарии игрока -->
                         <li
                             @click="heroCommentlistClick"
                             v-for="(item, index) in heroComments"
@@ -18,6 +16,7 @@
                             actiontype="counterIndex"
                             :counter="index"
                         >- {{ item }}</li>
+                        <!-- Действия игрока -->
                         <li
                             @click="heroCommentlistClick"
                             v-for="item in heroActions"
@@ -34,8 +33,9 @@
 <script>
 // Фоновые картинки *
 import sceneImage from "@/assets/img/mage-loc.jpg";
-
+// Vuex *
 import { mapGetters, mapActions } from 'vuex'
+
 export default {
     name: 'DialogueScene',
     data() {
@@ -70,17 +70,20 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'RUNOLV_SCENE_STATE'
-        ]),
-    },
-    methods: {
-        ...mapActions([
-            'RUNOLV_SCENE_ACT'
+            // 'RUNOLV_SCENE_STATE',
+            'MODAL_SHOW_STATE'
         ]),
         sceneData() {
             // Фоновая картинки сцены * 
             return this.sceneClasses[this.gameSceneCurrent];
         },
+    },
+    methods: {
+        ...mapActions([
+            // 'RUNOLV_SCENE_ACT',
+            'MODAL_SHOW_ACT',
+            'OVERLAY_HIDE_ACT'
+        ]),
         updateData() {
             // Текущая ветка диалога (индекс массива textContent в объекте персонажа) *
             this.dialogueLevel = this.currentCharacter.dialogueLevel;
@@ -98,17 +101,27 @@ export default {
         heroCommentlistClick(e) {
             var target = e.currentTarget.getAttribute('actiontype');
             var targetIndex = e.currentTarget.getAttribute('counter');
-
+            // Клик по комментариям игрока *
             if (target == 'counterIndex') {
                 this.npcComment = this.answearsNPC[targetIndex];
             }
+            // Переход на следующую диалоговую ветку *
             if (target == 'nextContent') {
                 this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
                 this.updateData();
             }
+            // Возврат в предыдущую диалоговую ветку *
             if (target == 'prevContent') {
                 this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
                 this.updateData();
+            }
+            // Закрыть сцену *
+            if (target == 'closeScene') {
+                this.gameData.gameSceneCurrent = null;
+                this.OVERLAY_HIDE_ACT();
+                this.MODAL_SHOW_ACT();
+                var serialDataBase = JSON.stringify(this.gameData);
+                localStorage.setItem("gameData", serialDataBase);
             }
         }
     }

@@ -1,5 +1,5 @@
 <template>
-    <div class="modal journal" v-if="isShowIntro">
+    <div class="modal journal">
         <p class="journal-title">Начало</p>
         <div class="begin-img begin-img_start">
             <img :src="image" />
@@ -16,7 +16,6 @@
 <script>
 import Button from '@/components/Buttons/Button.vue';
 import image from "@/assets/img/bg-main.jpg";
-import { dataBase } from '@/database/database';
 import { mapActions } from 'vuex'
 
 export default {
@@ -26,52 +25,32 @@ export default {
     },
     data() {
         return {
-            isShowIntro: true,
             image,
             gameData: {}
         };
     },
     mounted() {
-        // Отключаем стораж **** 
-        localStorage.clear();
-        // !!!!!!!!
-
-        console.log(localStorage.getItem('gameData'));
-
-        // Заносим в locale storage первичную структуру базы данных *
-        if (localStorage.getItem('gameData') == null) {
-            var serialDataBase = JSON.stringify(dataBase);
-            localStorage.setItem("gameData", serialDataBase);
-        }
-
-        // Получаем данные *
+        // Получаем данные с сервера *
         var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
         this.gameData = gameDataResponse;
-
-        // Проверка на стартовый экран *
-        if (gameDataResponse) {
-            var checkIntro = gameDataResponse.gameSceneCurrent;
-            if (checkIntro != 'intro') {
-                this.OVERLAY_HIDE_ACT();
-                this.isShowIntro = false;
-            }
-        }
     },
     methods: {
         ...mapActions([
-            'OVERLAY_HIDE_ACT',
-            'RUNOLV_SCENE_ACT',
+            // 'RUNOLV_SCENE_ACT',
             'MODAL_SHOW_ACT'
         ]),
         btnClick() {
-            this.isShowIntro = false;
-            this.RUNOLV_SCENE_ACT();
-            this.MODAL_SHOW_ACT();
             // Переход на сцену с Магом, сохранение данных в базе *
+            // this.RUNOLV_SCENE_ACT();
+            this.MODAL_SHOW_ACT();
             this.gameData.gameSceneCurrent = 'runolv';
             var serialDataBase = JSON.stringify(this.gameData);
             localStorage.setItem("gameData", serialDataBase);
-            console.log(this.gameData.gameSceneCurrent);
+
+            // Передача родителю события на закрытие вступительного окна *
+            this.$emit('hideIntro', {
+                intro: false
+            });
         }
     }
 }
