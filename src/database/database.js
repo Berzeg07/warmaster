@@ -46,6 +46,10 @@ export var dataBase = {
         heroGold: 1000,
         heroWeapon: 'Пусто',
         heroEquip: 'Пусто',
-        invItems: [{}],
+        inventory: [{}],
+        questList: [{
+            questTitle: 'Начало',
+            questArticle: ['Добрый маг привел меня в чувство и дал не много денег. Нужно добраться до города и осмотреться, может подвернеться какое ни будь дельце']
+        }]
     }
 }

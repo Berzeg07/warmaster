@@ -9,12 +9,17 @@ export default new Vuex.Store({
     overlay: true,
     // Вывод сцены *
     modalShow: false,
+    // Журнал квестов *
+    questListShow: false,
     // Диалоговые сцены *
     // scenesObj: { runolvFirtsScene: false },
     // Вступительный экран *
     intro: true
   },
   mutations: {
+    QUEST_LIST_TOGGLE(state) {
+      state.questListShow = !state.questListShow;
+    },
     OVERLAY_HIDE(state) {
       state.overlay = false;
     },
@@ -29,6 +34,9 @@ export default new Vuex.Store({
     // },
   },
   actions: {
+    QUEST_LIST_TOGGLE_ACT({ commit }) {
+      commit('QUEST_LIST_TOGGLE');
+    },
     OVERLAY_HIDE_ACT({ commit }) {
       commit('OVERLAY_HIDE');
     },
@@ -43,6 +51,9 @@ export default new Vuex.Store({
     // },
   },
   getters: {
+    QUEST_LIST_STATE(state) {
+      return state.questListShow;
+    },
     OVERLAY_STATE(state) {
       return state.overlay;
     },

@@ -9,6 +9,7 @@
                 <GeorgFarm />
                 <FoggyHollow />
                 <FridrickFarm />
+                <QuestList v-if="QUEST_LIST_STATE" :class="checkQuestModalState" />
                 <Introduction v-if="isShowIntro" @hideIntro="hideIntro" />
             </div>
             <Overlay />
@@ -42,6 +43,9 @@ import Overlay from '@/components/Overlay/Overlay.vue';
 import Hero from '@/components/Hero/Hero.vue';
 import HeroInfoBar from '@/components/Hero/HeroInfoBar.vue';
 
+// Журнал квестов *
+import QuestList from '@/components/Hero/QuestList.vue';
+
 // Фоновые картинки *
 import backgroundUrl from "@/assets/img/bg-main.jpg";
 import backgroundMap from "@/assets/img/map.png";
@@ -62,7 +66,8 @@ export default {
         FridrickFarm,
         Overlay,
         Introduction,
-        DialogueScene
+        DialogueScene,
+        QuestList
     },
     data() {
         return {
@@ -74,7 +79,7 @@ export default {
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        localStorage.clear();
+        // localStorage.clear();
 
         // Заносим в locale storage первичную структуру базы данных *
         if (localStorage.getItem('gameData') == null) {
@@ -99,18 +104,22 @@ export default {
     computed: {
         ...mapGetters([
             'MODAL_SHOW_STATE',
-            'OVERLAY_STATE'
+            'OVERLAY_STATE',
+            'QUEST_LIST_STATE'
         ]),
 
         checkModalState() {
             return this.MODAL_SHOW_STATE == true ? this.modalShow : '';
+        },
+        checkQuestModalState() {
+            return this.QUEST_LIST_STATE == true ? this.modalShow : '';
         }
     },
     methods: {
         ...mapActions([
             'OVERLAY_HIDE_ACT',
             'OVERLAY_SHOW_ACT',
-            'MODAL_SHOW_ACT'
+            'MODAL_SHOW_ACT',
         ]),
         hideIntro(data) {
             this.isShowIntro = data.intro;

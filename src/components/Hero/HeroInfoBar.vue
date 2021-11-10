@@ -1,7 +1,7 @@
 <template>
     <div class="hero-infobar">
         <div class="hero-infobar_btn">
-            <Button class="panel-journal_btn">Журнал</Button>
+            <Button @click.native="questListToggle" class="panel-journal_btn">Журнал</Button>
             <Button class="panel-inv_btn">Инвентарь</Button>
         </div>
         <ul class="hero-skill">
@@ -41,6 +41,8 @@
 
 <script>
 import Button from '@/components/Buttons/Button.vue';
+import { mapActions } from 'vuex'
+
 export default {
     name: 'HeroInfoBar',
     data() {
@@ -56,6 +58,16 @@ export default {
             // Получаем данные *
             var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
             this.gameData = gameDataResponse.hero;
+        }
+    },
+    methods: {
+        ...mapActions([
+            'QUEST_LIST_TOGGLE_ACT',
+            'OVERLAY_SHOW_ACT'
+        ]),
+        questListToggle() {
+            this.QUEST_LIST_TOGGLE_ACT();
+            this.OVERLAY_SHOW_ACT();
         }
     }
 }
