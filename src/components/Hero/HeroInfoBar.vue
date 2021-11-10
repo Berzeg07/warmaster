@@ -7,33 +7,33 @@
         <ul class="hero-skill">
             <li>
                 <span>Урон:</span>
-                <span>10</span>
+                <span>{{ gameData.heroDamage }}</span>
             </li>
             <li>
                 <span>Броня:</span>
-                <span>0</span>
+                <span>{{ gameData.heroArmor }}</span>
             </li>
             <li>
                 <span>Крит:</span>
-                <span>20%</span>
+                <span>{{ gameData.heroCrit }}%</span>
             </li>
             <li>
                 <span>Здоровье:</span>
-                <span>100</span>
+                <span>{{ gameData.heroHP }}</span>
             </li>
             <li>
                 <span>Золото:</span>
-                <span id="hero_gold">15000</span>
+                <span>{{ gameData.heroGold }}</span>
             </li>
         </ul>
         <ul class="hero-equip">
             <li>
                 <span>Оружие:</span>
-                <span id="weaponEquip">Пусто</span>
+                <span>{{ gameData.heroWeapon }}</span>
             </li>
             <li>
                 <span>Доспех:</span>
-                <span id="armorEquip">Пусто</span>
+                <span>{{ gameData.heroEquip }}</span>
             </li>
         </ul>
     </div>
@@ -43,9 +43,20 @@
 import Button from '@/components/Buttons/Button.vue';
 export default {
     name: 'HeroInfoBar',
+    data() {
+        return {
+            gameData: {}
+        }
+    },
     components: {
         Button
-        // HelloWorld
+    },
+    mounted() {
+        if (localStorage.getItem('gameData') != null) {
+            // Получаем данные *
+            var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+            this.gameData = gameDataResponse.hero;
+        }
     }
 }
 </script>
