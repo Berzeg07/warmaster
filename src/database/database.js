@@ -5,6 +5,7 @@ export var dataBase = {
         runolv: {
             npcName: 'Рунольв',
             dialogueLevel: 0,
+            sceneImage: 'runolv',
             textContent: [
                 {
                     textNPC: 'Ты спал два дня, я смог вытащить тебя из под завала, камнями завалило половину перевала. Ты получил сильный удар по голове, но нам повезло. Как ты себя чувствуешь?',
@@ -34,6 +35,24 @@ export var dataBase = {
                         }
                     ],
                 },
+            ]
+        },
+        runolvHouseEmpty: {
+            npcName: '',
+            dialogueLevel: 0,
+            sceneImage: 'runolvEmptyHouse',
+            textContent: [
+                {
+                    textNPC: 'В доме никого нет ...',
+                    heroComments: [],
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene'
+                        }
+                    ],
+                    answearsNPC: {}
+                }
             ]
         }
     },

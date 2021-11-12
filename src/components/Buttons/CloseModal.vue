@@ -17,6 +17,11 @@ import { mapActions } from 'vuex'
 
 export default {
     name: 'CloseModal',
+    props: {
+        modalElement: {
+            type: String,
+        }
+    },
     data() {
         return {
             upHere: false,
@@ -37,8 +42,10 @@ export default {
             }
         },
         clickClose() {
-            this.QUEST_LIST_TOGGLE_ACT();
-            this.OVERLAY_HIDE_ACT();
+            if (this.modalElement == 'questList') {
+                this.QUEST_LIST_TOGGLE_ACT();
+                this.OVERLAY_HIDE_ACT();
+            }
         }
     }
 }

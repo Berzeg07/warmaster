@@ -88,7 +88,8 @@ export default {
         }
         // Получаем данные *
         var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
-        console.log(gameDataResponse.gameSceneCurrent)
+        // console.log('gameSceneCurrent ', gameDataResponse.gameSceneCurrent)
+        console.log(gameDataResponse.hero.questList)
         // Проверка на стартовый экран и состояние текущей сцены *
         if (gameDataResponse.gameSceneCurrent != 'intro') {
             this.isShowIntro = false;

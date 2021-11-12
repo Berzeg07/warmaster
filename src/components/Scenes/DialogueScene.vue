@@ -3,7 +3,7 @@
         <div class="modal-inner">
             <div class="dialogue">
                 <p class="dialogue_article" id="dialogue">
-                    <b>{{ npcName + ':' + ' ' }}</b>
+                    <b v-if="npcName != ''">{{ npcName + ':' + ' ' }}</b>
                     <span>{{ npcComment }}</span>
                 </p>
                 <div class="btn-block btn-block_dialogue">
@@ -33,6 +33,8 @@
 <script>
 // Фоновые картинки *
 import sceneImage from "@/assets/img/mage-loc.jpg";
+import runolvEmptyHouse from "@/assets/img/mage_house-loc.jpg";
+
 // Vuex *
 import { mapGetters, mapActions } from 'vuex'
 
@@ -43,6 +45,7 @@ export default {
             gameSceneCurrent: '',
             currentCharacter: '',
             dialogueLevel: 0,
+            sceneImage: '',
             npcName: '',
             npcComment: '',
             heroComments: [],
@@ -50,7 +53,8 @@ export default {
             heroActions: [],
             gameData: {},
             sceneClasses: {
-                runolv: sceneImage
+                runolv: sceneImage,
+                runolvEmptyHouse
             },
         }
     },
@@ -75,7 +79,7 @@ export default {
         ]),
         sceneData() {
             // Фоновая картинки сцены * 
-            return this.sceneClasses[this.gameSceneCurrent];
+            return this.sceneClasses[this.sceneImage];
         },
     },
     methods: {
@@ -97,6 +101,8 @@ export default {
             this.answearsNPC = this.currentCharacter.textContent[this.dialogueLevel].answearsNPC;
             // Действия игрока *
             this.heroActions = this.currentCharacter.textContent[this.dialogueLevel].heroActions;
+            // Фоновая картинка *
+            this.sceneImage = this.currentCharacter.sceneImage;
         },
         heroCommentlistClick(e) {
             var target = e.currentTarget.getAttribute('actiontype');

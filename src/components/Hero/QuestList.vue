@@ -1,7 +1,7 @@
 <template>
     <div class="modal modalshow journal">
         <p class="journal-title">Журнал</p>
-        <CloseModal />
+        <CloseModal modalElement="questList" />
         <div class="journal-item">
             <div class="quest-box" v-for="item in gameData" :key="item.questTitle">
                 <p class="quest-title">{{ item.questTitle }}</p>
