@@ -79,10 +79,11 @@ export default {
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        localStorage.clear();
+        // localStorage.clear();
 
         // Заносим в locale storage первичную структуру базы данных *
         if (localStorage.getItem('gameData') == null) {
+            console.log(dataBase)
             var serialDataBase = JSON.stringify(dataBase);
             localStorage.setItem("gameData", serialDataBase);
         }

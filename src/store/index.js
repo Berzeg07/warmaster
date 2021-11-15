@@ -58,7 +58,9 @@ export default new Vuex.Store({
       commit('OVERLAY_SHOW');
     },
     MODAL_SHOW_ACT({ commit }) {
+
       commit('MODAL_SHOW_TOGGLE');
+
     },
     HORINIS_SHOW_ACT({ commit }) {
       commit('HORINIS_SHOW');

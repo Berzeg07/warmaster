@@ -1,15 +1,29 @@
 <template>
     <div class="georg-farm">
-        <Tooltip class="georg" id="georg">Двор Георга</Tooltip>
+        <Tooltip @click.native="showScene" class="georg">Двор Георга</Tooltip>
     </div>
 </template>
 
 <script>
 import Tooltip from '@/components/Buttons/Tooltip.vue';
+// Vuex *
+import { mapActions } from 'vuex'
+// Миксины *
+import { sceneRender } from '@/mixins/mixins';
 export default {
     name: 'GeorgFarm',
+    mixins: [sceneRender],
     components: {
         Tooltip
+    },
+    methods: {
+        ...mapActions([
+            'OVERLAY_SHOW_ACT',
+            'MODAL_SHOW_ACT',
+        ]),
+        showScene() {
+            this.sceneRender('georgFarm');
+        }
     }
 }
 </script>

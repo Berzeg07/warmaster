@@ -20,7 +20,6 @@ export default {
     },
     methods: {
         ...mapActions([
-            'OVERLAY_HIDE_ACT',
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
         ]),

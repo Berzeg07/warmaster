@@ -9,7 +9,7 @@
                 <Tooltip class="shop">Лавка</Tooltip>
                 <Tooltip class="bernard" v-if="BERNARD_SHOW_STATE">Бернард</Tooltip>
             </div>
-            <Tooltip class="guard">Стража</Tooltip>
+            <Tooltip @click.native="showSceneGuard" class="guard">Стража</Tooltip>
         </div>
     </div>
 </template>
@@ -17,10 +17,13 @@
 <script>
 import Tooltip from '@/components/Buttons/Tooltip.vue';
 // Vuex *
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+// Миксины *
+import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
 
 export default {
     name: 'Horinis',
+    mixins: [findWithKey, questAddList, sceneRender],
     components: {
         Tooltip
     },
@@ -30,7 +33,24 @@ export default {
             'HEROHOUSE_SHOW_STATE',
             'BERNARD_SHOW_STATE'
         ]),
+    },
+    methods: {
+        ...mapActions([
+            'OVERLAY_SHOW_ACT',
+            'MODAL_SHOW_ACT',
+        ]),
+        showSceneGuard() {
+            var gameDataResponse = this.sceneRender('horinisGuard');
+            var currentQuestList = gameDataResponse.hero.questList;
+            var newQuest = {
+                questTitle: 'Начало',
+                questArticle: 'В Хэртланд не пускают чужаков, нужно найти способ попасть в город'
+            }
+            var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', newQuest.questTitle);
+            this.questAddList(checkQuestList, currentQuestList, newQuest);
+        }
     }
+
 }
 </script>
 

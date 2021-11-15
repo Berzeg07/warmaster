@@ -34,12 +34,20 @@
 // Фоновые картинки *
 import sceneImage from "@/assets/img/mage-loc.jpg";
 import runolvEmptyHouse from "@/assets/img/mage_house-loc.jpg";
+import horinisGuard from "@/assets/img/guard-loc.jpg";
+import georgFarm from "@/assets/img/georg-loc.jpg";
+import georgFarmWork from "@/assets/img/farm-loc.jpg";
+
+// Миксины *
+import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
 
 // Vuex *
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'DialogueScene',
+    mixins: [findWithKey, questAddList, sceneRender],
+
     data() {
         return {
             gameSceneCurrent: '',
@@ -54,7 +62,10 @@ export default {
             gameData: {},
             sceneClasses: {
                 runolv: sceneImage,
-                runolvEmptyHouse
+                runolvEmptyHouse,
+                horinisGuard,
+                georgFarm,
+                georgFarmWork
             },
         }
     },
@@ -85,6 +96,7 @@ export default {
     methods: {
         ...mapActions([
             // 'RUNOLV_SCENE_ACT',
+            'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
             'OVERLAY_HIDE_ACT'
         ]),
@@ -104,30 +116,42 @@ export default {
             // Фоновая картинка *
             this.sceneImage = this.currentCharacter.sceneImage;
         },
+        closeScene() {
+            this.gameData.gameSceneCurrent = null;
+            var serialDataBase = JSON.stringify(this.gameData);
+            localStorage.setItem("gameData", serialDataBase);
+            this.OVERLAY_HIDE_ACT();
+            this.MODAL_SHOW_ACT();
+        },
         heroCommentlistClick(e) {
             var target = e.currentTarget.getAttribute('actiontype');
             var targetIndex = e.currentTarget.getAttribute('counter');
-            // Клик по комментариям игрока *
-            if (target == 'counterIndex') {
-                this.npcComment = this.answearsNPC[targetIndex];
-            }
-            // Переход на следующую диалоговую ветку *
-            if (target == 'nextContent') {
-                this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
-                this.updateData();
-            }
-            // Возврат в предыдущую диалоговую ветку *
-            if (target == 'prevContent') {
-                this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
-                this.updateData();
-            }
-            // Закрыть сцену *
-            if (target == 'closeScene') {
-                this.gameData.gameSceneCurrent = null;
-                this.OVERLAY_HIDE_ACT();
-                this.MODAL_SHOW_ACT();
-                var serialDataBase = JSON.stringify(this.gameData);
-                localStorage.setItem("gameData", serialDataBase);
+            switch (target) {
+                // Вывод ответов NPC на комментарии игрока *
+                case 'counterIndex':
+                    this.npcComment = this.answearsNPC[targetIndex];
+                    break;
+                // Переход на следующую диалоговую ветку *
+                case 'nextContent':
+                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
+                    this.updateData();
+                    break;
+                // Возврат в предыдущую диалоговую ветку *
+                case 'prevContent':
+                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
+                    this.updateData();
+                    break;
+                // Закрыть сцену *
+                case 'closeScene':
+                    this.closeScene();
+                    break;
+                // Работа на Георга *
+                case 'workOnGeorgFarm':
+                    this.closeScene();
+                    this.$nextTick(() => {
+                        this.sceneRender('georgFarmWork');
+                    });
+                    break;
             }
         }
     }
