@@ -1,25 +1,35 @@
 <template>
     <div class="horinis">
         <div class="horinis-inner">
-            <div class="block-loc" id="horinis_loc">
-                <Tooltip class="andreas" id="andreas">Андреас</Tooltip>
-                <Tooltip class="tavern" id="tavern">Таверна</Tooltip>
-                <Tooltip class="house" id="house">Дом</Tooltip>
-                <Tooltip class="garold" id="garold">Гарольд</Tooltip>
-                <Tooltip class="shop" id="shop">Лавка</Tooltip>
-                <Tooltip class="bernard" id="bernard">Бернард</Tooltip>
+            <div class="block-loc" v-if="HORINIS_SHOW_STATE">
+                <Tooltip class="andreas">Андреас</Tooltip>
+                <Tooltip class="tavern">Таверна</Tooltip>
+                <Tooltip class="house" v-if="HEROHOUSE_SHOW_STATE">Дом</Tooltip>
+                <Tooltip class="garold">Гарольд</Tooltip>
+                <Tooltip class="shop">Лавка</Tooltip>
+                <Tooltip class="bernard" v-if="BERNARD_SHOW_STATE">Бернард</Tooltip>
             </div>
-            <Tooltip class="guard" id="guard">Стража</Tooltip>
+            <Tooltip class="guard">Стража</Tooltip>
         </div>
     </div>
 </template>
 
 <script>
 import Tooltip from '@/components/Buttons/Tooltip.vue';
+// Vuex *
+import { mapGetters } from 'vuex'
+
 export default {
     name: 'Horinis',
     components: {
         Tooltip
+    },
+    computed: {
+        ...mapGetters([
+            'HORINIS_SHOW_STATE',
+            'HEROHOUSE_SHOW_STATE',
+            'BERNARD_SHOW_STATE'
+        ]),
     }
 }
 </script>

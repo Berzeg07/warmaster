@@ -1,6 +1,27 @@
 export var dataBase = {
     gameSceneCurrent: 'intro',
     gameFightScene: false,
+    hero: {
+        heroName: 'Герой',
+        heroDamage: 10,
+        heroArmor: 0,
+        heroCrit: 20,
+        heroHP: 100,
+        heroGold: 1000,
+        heroWeapon: 'Пусто',
+        heroEquip: 'Пусто',
+        inventory: [{}],
+        questList: [{
+            questTitle: 'Начало',
+            questArticle: ['Добрый маг привел меня в чувство и дал не много денег. Нужно добраться до города и осмотреться, может подвернеться какое ни будь дельце']
+        }]
+    },
+    isShowPlace: {
+        horinis: false,
+        fridrickFarm: false,
+        heroHouse: false,
+        bernard: false
+    },
     charactersNPC: {
         runolv: {
             npcName: 'Рунольв',
@@ -56,19 +77,4 @@ export var dataBase = {
             ]
         }
     },
-    hero: {
-        heroName: 'Герой',
-        heroDamage: 10,
-        heroArmor: 0,
-        heroCrit: 20,
-        heroHP: 100,
-        heroGold: 1000,
-        heroWeapon: 'Пусто',
-        heroEquip: 'Пусто',
-        inventory: [{}],
-        questList: [{
-            questTitle: 'Начало',
-            questArticle: ['Добрый маг привел меня в чувство и дал не много денег. Нужно добраться до города и осмотреться, может подвернеться какое ни будь дельце']
-        }]
-    }
 }

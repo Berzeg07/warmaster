@@ -10,16 +10,11 @@ import Tooltip from '@/components/Buttons/Tooltip.vue';
 // Vuex *
 import { mapActions } from 'vuex'
 // Миксины *
-import { findWithKey, questAddList } from '@/mixins/mixins';
+import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
 
 export default {
     name: 'MageHouse',
-    mixins: [findWithKey, questAddList],
-    data() {
-        return {
-            questJournal: []
-        }
-    },
+    mixins: [findWithKey, questAddList, sceneRender],
     components: {
         Tooltip
     },
@@ -30,14 +25,8 @@ export default {
             'MODAL_SHOW_ACT',
         ]),
         showScene() {
-            if (localStorage.getItem('gameData') != null) {
-                var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
-                gameDataResponse.gameSceneCurrent = 'runolvHouseEmpty';
-                var serialDataBase = JSON.stringify(gameDataResponse);
-                localStorage.setItem("gameData", serialDataBase);
-                this.OVERLAY_SHOW_ACT();
-                this.MODAL_SHOW_ACT();
-
+            var gameDataResponse = this.sceneRender('runolvHouseEmpty');
+            if (gameDataResponse) {
                 var currentQuestList = gameDataResponse.hero.questList;
                 var newQuest = {
                     questTitle: 'Начало',
@@ -45,9 +34,6 @@ export default {
                 }
                 var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', newQuest.questTitle);
                 this.questAddList(checkQuestList, currentQuestList, newQuest);
-
-            } else {
-                console.log('Отсутствует база данных');
             }
         }
     }

@@ -8,7 +8,7 @@
                 <Horinis />
                 <GeorgFarm />
                 <FoggyHollow />
-                <FridrickFarm />
+                <FridrickFarm v-if="FRIDRICKFARM_SHOW_STATE" />
                 <QuestList v-if="QUEST_LIST_STATE" :class="checkQuestModalState" />
                 <Introduction v-if="isShowIntro" @hideIntro="hideIntro" />
             </div>
@@ -79,7 +79,7 @@ export default {
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        // localStorage.clear();
+        localStorage.clear();
 
         // Заносим в locale storage первичную структуру базы данных *
         if (localStorage.getItem('gameData') == null) {
@@ -106,7 +106,8 @@ export default {
         ...mapGetters([
             'MODAL_SHOW_STATE',
             'OVERLAY_STATE',
-            'QUEST_LIST_STATE'
+            'QUEST_LIST_STATE',
+            'FRIDRICKFARM_SHOW_STATE',
         ]),
 
         checkModalState() {

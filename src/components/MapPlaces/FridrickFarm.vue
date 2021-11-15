@@ -1,15 +1,16 @@
 <template>
     <div class="farm">
         <div class="farm-inner">
-            <Tooltip class="gerhard" id="gerhard">Герхард</Tooltip>
-            <Tooltip class="fridrick" id="fridrick">Фридрик</Tooltip>
-            <Tooltip class="job" id="job">Ферма</Tooltip>
+            <Tooltip class="gerhard">Сантино</Tooltip>
+            <Tooltip class="fridrick">Фридрик</Tooltip>
+            <Tooltip class="job">Ферма</Tooltip>
         </div>
     </div>
 </template>
 
 <script>
 import Tooltip from '@/components/Buttons/Tooltip.vue';
+
 export default {
     name: 'FridrickFarm',
     components: {
