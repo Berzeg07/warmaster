@@ -22,6 +22,7 @@
                             v-for="item in heroActions"
                             :key="item.text"
                             :actiontype="item.attr"
+                            :dialogueLevelAfterClose="item.dialogueLevelAfterClose"
                         >- {{ item.text }}</li>
                     </ul>
                 </div>
@@ -60,6 +61,8 @@ export default {
             answearsNPC: {},
             heroActions: [],
             gameData: {},
+            questAdd: {},
+            newDialogueBranches: '',
             sceneClasses: {
                 runolv: sceneImage,
                 runolvEmptyHouse,
@@ -85,7 +88,6 @@ export default {
     },
     computed: {
         ...mapGetters([
-            // 'RUNOLV_SCENE_STATE',
             'MODAL_SHOW_STATE'
         ]),
         sceneData() {
@@ -95,7 +97,6 @@ export default {
     },
     methods: {
         ...mapActions([
-            // 'RUNOLV_SCENE_ACT',
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
             'OVERLAY_HIDE_ACT'
@@ -103,6 +104,10 @@ export default {
         updateData() {
             // Текущая ветка диалога (индекс массива textContent в объекте персонажа) *
             this.dialogueLevel = this.currentCharacter.dialogueLevel;
+            // Возможный квест в текущей диалоговой ветке *
+            this.questAdd = this.currentCharacter.textContent[this.dialogueLevel].questAdd;
+            // Возможное развитие диалоговых веток в других сценах *
+            this.newDialogueBranches = this.currentCharacter.textContent[this.dialogueLevel].newDialogueBranches;
             // Имя персонажа NPC *
             this.npcName = this.currentCharacter.npcName;
             // Комментарий NPC *
@@ -115,44 +120,72 @@ export default {
             this.heroActions = this.currentCharacter.textContent[this.dialogueLevel].heroActions;
             // Фоновая картинка *
             this.sceneImage = this.currentCharacter.sceneImage;
+            console.log('this.newDialogueBranches ', this.newDialogueBranches);
         },
-        closeScene() {
+        closeScene(currentDialogueLevel) {
+            this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = currentDialogueLevel;
             this.gameData.gameSceneCurrent = null;
             var serialDataBase = JSON.stringify(this.gameData);
             localStorage.setItem("gameData", serialDataBase);
             this.OVERLAY_HIDE_ACT();
             this.MODAL_SHOW_ACT();
         },
-        heroCommentlistClick(e) {
-            var target = e.currentTarget.getAttribute('actiontype');
-            var targetIndex = e.currentTarget.getAttribute('counter');
-            switch (target) {
-                // Вывод ответов NPC на комментарии игрока *
-                case 'counterIndex':
-                    this.npcComment = this.answearsNPC[targetIndex];
-                    break;
-                // Переход на следующую диалоговую ветку *
-                case 'nextContent':
-                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
-                    this.updateData();
-                    break;
-                // Возврат в предыдущую диалоговую ветку *
-                case 'prevContent':
-                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
-                    this.updateData();
-                    break;
-                // Закрыть сцену *
-                case 'closeScene':
-                    this.closeScene();
-                    break;
-                // Работа на Георга *
-                case 'workOnGeorgFarm':
-                    this.closeScene();
+        heroActionEvent(action, event) {
+            const actions = {
+                workOnGeorgFarm: () => {
+                    this.closeScene(3);
                     this.$nextTick(() => {
                         this.sceneRender('georgFarmWork');
                     });
-                    break;
+                },
+                counterIndex: (event) => {
+                    var targetIndex = event.currentTarget.getAttribute('counter');
+                    this.npcComment = this.answearsNPC[targetIndex];
+                },
+                nextContent: () => {
+                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
+                    this.updateData();
+                },
+                prevContent: () => {
+                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
+                    this.updateData();
+                },
+                closeScene: (event) => {
+                    var dialogueLevelAfterClose = event.currentTarget.getAttribute('dialogueLevelAfterClose');
+                    if (dialogueLevelAfterClose) {
+                        this.closeScene(dialogueLevelAfterClose);
+                        return;
+                    }
+                    this.closeScene(0);
+                }
             }
+            return actions[action](event);
+        },
+        heroCommentlistClick(event) {
+            if (this.newDialogueBranches != undefined) {
+                var currentNewBranch = this.gameData.newDialogueComments[this.gameSceneCurrent][this.newDialogueBranches];
+                console.log(currentNewBranch);
+                if (currentNewBranch.isAddDataBase != true) {
+                    var targetForBranch = currentNewBranch.targetForThisBranch;
+                    var targetDialogueLevel = currentNewBranch.dialogueLevel;
+                    var targetObject = this.gameData.charactersNPC[targetForBranch].textContent[targetDialogueLevel].heroComments;
+                    if (currentNewBranch.textContent.heroComments != undefined) {
+                        var newArr = [...targetObject, ...currentNewBranch.textContent.heroComments];
+                        console.log('arr ', newArr);
+                        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        // есть контакт доработать !!!!! +===============================!!!!!!!!!!
+                    }
+
+                    console.log(targetObject.textNPC);
+                }
+            }
+            if (this.questAdd != undefined) {
+                var currentQuestList = this.gameData.hero.questList;
+                var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', this.questAdd.questTitle);
+                this.questAddList(checkQuestList, currentQuestList, this.questAdd);
+            }
+            var target = event.currentTarget.getAttribute('actiontype');
+            this.heroActionEvent(target, event)
         }
     }
 }

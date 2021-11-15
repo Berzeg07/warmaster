@@ -9,10 +9,10 @@ import Tooltip from '@/components/Buttons/Tooltip.vue';
 // Vuex *
 import { mapActions } from 'vuex'
 // Миксины *
-import { sceneRender } from '@/mixins/mixins';
+import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
 export default {
     name: 'GeorgFarm',
-    mixins: [sceneRender],
+    mixins: [findWithKey, questAddList, sceneRender],
     components: {
         Tooltip
     },
@@ -22,7 +22,16 @@ export default {
             'MODAL_SHOW_ACT',
         ]),
         showScene() {
-            this.sceneRender('georgFarm');
+            var gameDataResponse = this.sceneRender('georgFarm');
+            if (gameDataResponse) {
+                var currentQuestList = gameDataResponse.hero.questList;
+                var newQuest = {
+                    questTitle: 'Начало',
+                    questArticle: 'В Хэртланд не пускают чужаков, нужно найти способ попасть в город'
+                }
+                var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', newQuest.questTitle);
+                this.questAddList(checkQuestList, currentQuestList, newQuest);
+            }
         }
     }
 }

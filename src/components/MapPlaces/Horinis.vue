@@ -41,13 +41,15 @@ export default {
         ]),
         showSceneGuard() {
             var gameDataResponse = this.sceneRender('horinisGuard');
-            var currentQuestList = gameDataResponse.hero.questList;
-            var newQuest = {
-                questTitle: 'Начало',
-                questArticle: 'В Хэртланд не пускают чужаков, нужно найти способ попасть в город'
+            if (gameDataResponse) {
+                var currentQuestList = gameDataResponse.hero.questList;
+                var newQuest = {
+                    questTitle: 'Начало',
+                    questArticle: 'В Хэртланд не пускают чужаков, нужно найти способ попасть в город'
+                }
+                var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', newQuest.questTitle);
+                this.questAddList(checkQuestList, currentQuestList, newQuest);
             }
-            var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', newQuest.questTitle);
-            this.questAddList(checkQuestList, currentQuestList, newQuest);
         }
     }
 

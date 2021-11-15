@@ -1,6 +1,29 @@
 export var dataBase = {
     gameSceneCurrent: 'intro',
     gameFightScene: false,
+    newDialogueComments: {
+        georgFarm: {
+            entranceCity: {
+                isAddDataBase: false,
+                dialogueLevel: 0,
+                targetForThisBranch: 'horinisGuard',
+                textContent: {
+                    heroComments: ['Работаешь на Георга, можешь проходить, но смотри без глупостей тут! В тюрьме всегда есть свободные места']
+                }
+                // textContent: {
+                //     textNPC: 'Работаешь на Георга, можешь проходить, но смотри без глупостей тут! В тюрьме всегда есть свободные места',
+                //     heroComments: [],
+                //     heroActions: [
+                //         {
+                //             text: 'Уйти',
+                //             attr: 'closeScene'
+                //         }
+                //     ],
+                //     answearsNPC: {}
+                // },
+            }
+        }
+    },
     hero: {
         heroName: 'Герой',
         heroDamage: 10,
@@ -150,7 +173,6 @@ export var dataBase = {
                         }
                     ],
                 },
-
                 {
                     textNPC: 'Товар нужно поставить сегодня, а у меня не хватает рабочих рук, пройдоха Ханс опять упился, вторые сутки валяется на сене. Нужно собрать урожай, берешься?',
                     heroActions: [
@@ -164,7 +186,31 @@ export var dataBase = {
                         }
                     ]
                 },
-
+                {
+                    textNPC: 'Ты хорошо поработал. Возьми эту бумагу, там моя печать, стража пропустит тебя без проблем',
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                            dialogueLevelAfterClose: 4
+                        },
+                    ],
+                    questAdd: {
+                        questTitle: 'Начало',
+                        questArticle: 'Я помог собрать урожай Георга, за это он предоставил мне пропуск в город'
+                    },
+                    newDialogueBranches: 'entranceCity'
+                },
+                {
+                    textNPC: 'У меня много работы, если ты по делу говори',
+                    heroActions: [
+                        {
+                            text: 'Я просто проходил мимо',
+                            attr: 'closeScene',
+                            dialogueLevelAfterClose: 4
+                        }
+                    ]
+                }
 
             ]
         },
