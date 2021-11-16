@@ -1,6 +1,9 @@
 export var dataBase = {
     gameSceneCurrent: 'intro',
     gameFightScene: false,
+    gameProgress: {
+        isShowHorinis: false
+    },
     newDialogueComments: {
         georgFarm: {
             entranceCity: {
@@ -8,19 +11,15 @@ export var dataBase = {
                 dialogueLevel: 0,
                 targetForThisBranch: 'horinisGuard',
                 textContent: {
-                    heroComments: ['Работаешь на Георга, можешь проходить, но смотри без глупостей тут! В тюрьме всегда есть свободные места']
+                    // heroComments: ['У меня есть пропуск'],
+                    heroActions: [
+                        {
+                            text: 'У меня есть пропуск',
+                            attr: 'nextContent'
+                        }
+                    ],
+                    // answearsNPC: {}
                 }
-                // textContent: {
-                //     textNPC: 'Работаешь на Георга, можешь проходить, но смотри без глупостей тут! В тюрьме всегда есть свободные места',
-                //     heroComments: [],
-                //     heroActions: [
-                //         {
-                //             text: 'Уйти',
-                //             attr: 'closeScene'
-                //         }
-                //     ],
-                //     answearsNPC: {}
-                // },
             }
         }
     },
@@ -116,17 +115,25 @@ export var dataBase = {
                     answearsNPC: {
                         0: 'Скоро война с орками, мы должны быть готовы отразить любой удар!',
                         1: 'Мы пускаем только граждан Хэртланда или крестьян, ты не относишься ни к тем, ни к другим',
+                        2: 'Работаешь на Георга, можешь проходить, но смотри без глупостей тут! В тюрьме всегда есть свободные места',
                     }
                 },
                 {
-                    textNPC: 'Работаешь на Георга, можешь проходить, но смотри без глупостей тут! В тюрьме всегда есть свободные места',
+                    textNPC: 'Работаешь на Георга, можешь проходить. Но смотри, без глупостей тут, в тюрьме всегда есть свободные места!',
                     heroActions: [
                         {
                             text: 'Уйти',
-                            attr: 'closeScene'
+                            attr: 'closeScene',
+                            dialogueLevelAfterClose: 2,
                         }
                     ],
-                }, {
+                    gameProgressPoint: ['isShowHorinis'],
+                    questAdd: {
+                        questTitle: 'Начало',
+                        questArticle: 'Я смог попасть в Хоринис, нужно искать работу'
+                    },
+                },
+                {
                     textNPC: 'Если орки придут сюда я первым встречу их на стенах, наш город выстоит любой ценой!',
                     heroActions: [
                         {

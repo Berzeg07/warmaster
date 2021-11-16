@@ -27,6 +27,14 @@ export default {
     components: {
         Tooltip
     },
+    mounted() {
+        if (localStorage.getItem('gameData') != null) {
+            var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+            if (gameDataResponse.gameProgress.isShowHorinis) {
+                this.HORINIS_SHOW_ACT();
+            }
+        }
+    },
     computed: {
         ...mapGetters([
             'HORINIS_SHOW_STATE',
@@ -38,6 +46,7 @@ export default {
         ...mapActions([
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
+            'HORINIS_SHOW_ACT'
         ]),
         showSceneGuard() {
             var gameDataResponse = this.sceneRender('horinisGuard');

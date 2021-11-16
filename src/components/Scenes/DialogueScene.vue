@@ -62,6 +62,7 @@ export default {
             heroActions: [],
             gameData: {},
             questAdd: {},
+            gameProgressPoint: [],
             newDialogueBranches: '',
             sceneClasses: {
                 runolv: sceneImage,
@@ -99,14 +100,17 @@ export default {
         ...mapActions([
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
-            'OVERLAY_HIDE_ACT'
+            'OVERLAY_HIDE_ACT',
+            'HORINIS_SHOW_ACT'
         ]),
         updateData() {
             // Текущая ветка диалога (индекс массива textContent в объекте персонажа) *
             this.dialogueLevel = this.currentCharacter.dialogueLevel;
             // Возможный квест в текущей диалоговой ветке *
             this.questAdd = this.currentCharacter.textContent[this.dialogueLevel].questAdd;
-            // Возможное развитие диалоговых веток в других сценах *
+            // Флаги прогресса элементов геймплея *
+            this.gameProgressPoint = this.currentCharacter.textContent[this.dialogueLevel].gameProgressPoint;
+            // Ключ возможного развития диалоговых веток в других сценах (пример: 'entranceCity')*
             this.newDialogueBranches = this.currentCharacter.textContent[this.dialogueLevel].newDialogueBranches;
             // Имя персонажа NPC *
             this.npcName = this.currentCharacter.npcName;
@@ -120,7 +124,7 @@ export default {
             this.heroActions = this.currentCharacter.textContent[this.dialogueLevel].heroActions;
             // Фоновая картинка *
             this.sceneImage = this.currentCharacter.sceneImage;
-            console.log('this.newDialogueBranches ', this.newDialogueBranches);
+            // console.log('this.newDialogueBranches ', this.newDialogueBranches);
         },
         closeScene(currentDialogueLevel) {
             this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = currentDialogueLevel;
@@ -129,6 +133,14 @@ export default {
             localStorage.setItem("gameData", serialDataBase);
             this.OVERLAY_HIDE_ACT();
             this.MODAL_SHOW_ACT();
+        },
+        vuexActions(action) {
+            const actions = {
+                isShowHorinis: () => {
+                    this.HORINIS_SHOW_ACT();
+                }
+            }
+            return actions[action]();
         },
         heroActionEvent(action, event) {
             const actions = {
@@ -162,28 +174,56 @@ export default {
             return actions[action](event);
         },
         heroCommentlistClick(event) {
+            // Вывод новых диалоговых веток для других сцен по клику на элемент текущей ветки, если такое имеется *
             if (this.newDialogueBranches != undefined) {
+                // Объект новой диалоговой ветки *
                 var currentNewBranch = this.gameData.newDialogueComments[this.gameSceneCurrent][this.newDialogueBranches];
-                console.log(currentNewBranch);
+                var addDataBase = () => {
+                    this.gameData.newDialogueComments[this.gameSceneCurrent][this.newDialogueBranches].isAddDataBase = true;
+                }
+                // Если нет записи в базе *
                 if (currentNewBranch.isAddDataBase != true) {
+                    // Куда будет добавлена ветка *
                     var targetForBranch = currentNewBranch.targetForThisBranch;
+                    // Уровень вложенности ветки *
                     var targetDialogueLevel = currentNewBranch.dialogueLevel;
-                    var targetObject = this.gameData.charactersNPC[targetForBranch].textContent[targetDialogueLevel].heroComments;
+                    // Если есть комментарий игрока *
                     if (currentNewBranch.textContent.heroComments != undefined) {
+                        // Целевой объект (комментарии игрока)
+                        var targetObject = this.gameData.charactersNPC[targetForBranch].textContent[targetDialogueLevel].heroComments;
+                        // Объединяем данные *
                         var newArr = [...targetObject, ...currentNewBranch.textContent.heroComments];
-                        console.log('arr ', newArr);
-                        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        // есть контакт доработать !!!!! +===============================!!!!!!!!!!
+                        // Запись в главный объект *
+                        this.gameData.charactersNPC[targetForBranch].textContent[targetDialogueLevel].heroComments = newArr;
+                        addDataBase();
                     }
-
-                    console.log(targetObject.textNPC);
+                    // Если есть action *
+                    if (currentNewBranch.textContent.heroActions != undefined) {
+                        for (var i = 0; i < currentNewBranch.textContent.heroActions.length; i++) {
+                            this.gameData.charactersNPC[targetForBranch].textContent[targetDialogueLevel].heroActions.unshift(currentNewBranch.textContent.heroActions[i]);
+                        }
+                        addDataBase();
+                    }
                 }
             }
+            // Если есть квест в текущей ветке *
             if (this.questAdd != undefined) {
                 var currentQuestList = this.gameData.hero.questList;
                 var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', this.questAdd.questTitle);
                 this.questAddList(checkQuestList, currentQuestList, this.questAdd);
             }
+            // Если есть флаг прогресса *
+            if (this.gameProgressPoint != undefined) {
+                for (var point = 0; point < this.gameProgressPoint.length; point++) {
+                    var item = this.gameProgressPoint[point];
+                    console.log(item);
+                    if (this.gameData.gameProgress[item] != true) {
+                        this.gameData.gameProgress[item] = true;
+                        this.vuexActions(item);
+                    }
+                }
+            }
+            // Атрибут элемента по которому произошел клик *
             var target = event.currentTarget.getAttribute('actiontype');
             this.heroActionEvent(target, event)
         }
