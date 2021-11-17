@@ -72,16 +72,17 @@ export default {
     data() {
         return {
             modalShow: 'modalshow',
-            isShowIntro: true,
+            // Изначально true !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            isShowIntro: false,
             backgroundUrl,
             backgroundMap,
         };
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        // localStorage.clear();
+        localStorage.clear();
 
-        // Заносим в locale storage первичную структуру базы данных *
+        // Запись в locale storage первичной структуры базы данных *
         if (localStorage.getItem('gameData') == null) {
             var serialDataBase = JSON.stringify(dataBase);
             localStorage.setItem("gameData", serialDataBase);
@@ -98,6 +99,10 @@ export default {
                     this.MODAL_SHOW_ACT();
                 }
             }
+        }
+        // Проверка на доступность локации Фридрика *
+        if (gameDataResponse.gameProgress.isShowFarm) {
+            this.FRIDRICKFARM_SHOW_ACT();
         }
     },
     computed: {
@@ -120,6 +125,7 @@ export default {
             'OVERLAY_HIDE_ACT',
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
+            'FRIDRICKFARM_SHOW_ACT'
         ]),
         hideIntro(data) {
             this.isShowIntro = data.intro;

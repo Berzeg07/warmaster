@@ -3,13 +3,17 @@
         <div class="horinis-inner">
             <div class="block-loc" v-if="HORINIS_SHOW_STATE">
                 <Tooltip class="andreas">Андреас</Tooltip>
-                <Tooltip class="tavern">Таверна</Tooltip>
+                <Tooltip @click.native="showScene('selina', $event)" class="tavern">Таверна</Tooltip>
                 <Tooltip class="house" v-if="HEROHOUSE_SHOW_STATE">Дом</Tooltip>
                 <Tooltip class="garold">Гарольд</Tooltip>
                 <Tooltip class="shop">Лавка</Tooltip>
                 <Tooltip class="bernard" v-if="BERNARD_SHOW_STATE">Бернард</Tooltip>
             </div>
-            <Tooltip @click.native="showSceneGuard" class="guard">Стража</Tooltip>
+            <Tooltip
+                @click.native="showScene('horinisGuard', $event)"
+                data-type="cityguard"
+                class="guard"
+            >Стража</Tooltip>
         </div>
     </div>
 </template>
@@ -48,18 +52,21 @@ export default {
             'MODAL_SHOW_ACT',
             'HORINIS_SHOW_ACT'
         ]),
-        showSceneGuard() {
-            var gameDataResponse = this.sceneRender('horinisGuard');
+        showScene(scene, event) {
+            var gameDataResponse = this.sceneRender(scene);
+            var target = event.target.getAttribute('data-type');
             if (gameDataResponse) {
-                var currentQuestList = gameDataResponse.hero.questList;
-                var newQuest = {
-                    questTitle: 'Начало',
-                    questArticle: 'В Хэртланд не пускают чужаков, нужно найти способ попасть в город'
+                if (target == 'cityguard') {
+                    var currentQuestList = gameDataResponse.hero.questList;
+                    var newQuest = {
+                        questTitle: 'Начало',
+                        questArticle: 'В Хоринис не пускают чужаков, нужно найти способ попасть в город'
+                    }
+                    var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', newQuest.questTitle);
+                    this.questAddList(checkQuestList, currentQuestList, newQuest);
                 }
-                var checkQuestList = this.findWithKey(currentQuestList, 'questTitle', newQuest.questTitle);
-                this.questAddList(checkQuestList, currentQuestList, newQuest);
             }
-        }
+        },
     }
 
 }

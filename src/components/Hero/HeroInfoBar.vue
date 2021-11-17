@@ -19,7 +19,7 @@
             </li>
             <li>
                 <span>Здоровье:</span>
-                <span>{{ gameData.heroHP }}</span>
+                <span>{{ HERO_HP_STATE }}</span>
             </li>
             <li>
                 <span>Золото:</span>
@@ -41,7 +41,8 @@
 
 <script>
 import Button from '@/components/Buttons/Button.vue';
-import { mapActions } from 'vuex'
+// Vuex *
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'HeroInfoBar',
@@ -58,12 +59,19 @@ export default {
             // Получаем данные *
             var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
             this.gameData = gameDataResponse.hero;
+            this.HERO_HP_UPDATE_ACT(this.gameData.heroHP);
         }
+    },
+    computed: {
+        ...mapGetters([
+            'HERO_HP_STATE'
+        ]),
     },
     methods: {
         ...mapActions([
             'QUEST_LIST_TOGGLE_ACT',
-            'OVERLAY_SHOW_ACT'
+            'OVERLAY_SHOW_ACT',
+            'HERO_HP_UPDATE_ACT'
         ]),
         questListToggle() {
             this.QUEST_LIST_TOGGLE_ACT();

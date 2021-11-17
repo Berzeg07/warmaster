@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // Затемнение заднего фона *
-    overlay: true,
+    // Изначально true !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    overlay: false,
     // Вывод сцены *
     modalShow: false,
     // Журнал квестов *
@@ -15,13 +16,20 @@ export default new Vuex.Store({
     isShowPlace: {
       horinis: false,
       fridrickFarm: false,
+      fridrickFarmInner: false,
       heroHouse: false,
       bernard: false
+    },
+    hero: {
+      heroHP: 100
     },
     // Вступительный экран *
     intro: true
   },
   mutations: {
+    HERO_HP_UPDATE(state, currentHitpoint) {
+      state.hero.heroHP = currentHitpoint;
+    },
     QUEST_LIST_TOGGLE(state) {
       state.questListShow = !state.questListShow;
     },
@@ -40,6 +48,9 @@ export default new Vuex.Store({
     FRIDRICKFARM_SHOW(state) {
       state.isShowPlace.fridrickFarm = true;
     },
+    FRIDRICKFARM_INNER_SHOW(state) {
+      state.isShowPlace.fridrickFarmInner = true;
+    },
     HEROHOUSE_SHOW(state) {
       state.isShowPlace.heroHouse = true;
     },
@@ -48,6 +59,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    HERO_HP_UPDATE_ACT(context, currentHitpoint) {
+      context.commit('HERO_HP_UPDATE', currentHitpoint);
+    },
     QUEST_LIST_TOGGLE_ACT({ commit }) {
       commit('QUEST_LIST_TOGGLE');
     },
@@ -58,15 +72,16 @@ export default new Vuex.Store({
       commit('OVERLAY_SHOW');
     },
     MODAL_SHOW_ACT({ commit }) {
-
       commit('MODAL_SHOW_TOGGLE');
-
     },
     HORINIS_SHOW_ACT({ commit }) {
       commit('HORINIS_SHOW');
     },
     FRIDRICKFARM_SHOW_ACT({ commit }) {
       commit('FRIDRICKFARM_SHOW');
+    },
+    FRIDRICKFARM_INNER_SHOW_ACT({ commit }) {
+      commit('FRIDRICKFARM_INNER_SHOW');
     },
     HEROHOUSE_SHOW_ACT({ commit }) {
       commit('HEROHOUSE_SHOW');
@@ -76,6 +91,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    HERO_HP_STATE(state) {
+      return state.hero.heroHP;
+    },
     QUEST_LIST_STATE(state) {
       return state.questListShow;
     },
@@ -90,6 +108,9 @@ export default new Vuex.Store({
     },
     FRIDRICKFARM_SHOW_STATE(state) {
       return state.isShowPlace.fridrickFarm;
+    },
+    FRIDRICKFARM_INNER_SHOW_STATE(state) {
+      return state.isShowPlace.fridrickFarmInner;
     },
     HEROHOUSE_SHOW_STATE(state) {
       return state.isShowPlace.heroHouse;

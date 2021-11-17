@@ -1,8 +1,9 @@
 <template>
     <div class="modal modal-loc" :style="{ backgroundImage: `url(${sceneData})` }">
         <div class="modal-inner">
+            <div class="message-window" v-if="messWindow">{{ messWindow }}</div>
             <div class="dialogue">
-                <p class="dialogue_article" id="dialogue">
+                <p class="dialogue_article">
                     <b v-if="npcName != ''">{{ npcName + ':' + ' ' }}</b>
                     <span>{{ npcComment }}</span>
                 </p>
@@ -16,11 +17,19 @@
                             actiontype="counterIndex"
                             :counter="index"
                         >- {{ item }}</li>
+                        <!-- Магазин -->
+                        <li
+                            @click="buyProduct"
+                            v-for="item in shop"
+                            :key="item.product"
+                            :price="item.price"
+                        >- {{ item.product }} ({{ item.price }} монет)</li>
                         <!-- Действия игрока -->
                         <li
                             @click="heroCommentlistClick"
                             v-for="item in heroActions"
                             :key="item.text"
+                            :level="item.level"
                             :actiontype="item.attr"
                             :dialogueLevelAfterClose="item.dialogueLevelAfterClose"
                         >- {{ item.text }}</li>
@@ -38,6 +47,7 @@ import runolvEmptyHouse from "@/assets/img/mage_house-loc.jpg";
 import horinisGuard from "@/assets/img/guard-loc.jpg";
 import georgFarm from "@/assets/img/georg-loc.jpg";
 import georgFarmWork from "@/assets/img/farm-loc.jpg";
+import selina from "@/assets/img/tavern-loc.jpg";
 
 // Миксины *
 import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
@@ -51,6 +61,7 @@ export default {
 
     data() {
         return {
+            messWindow: '',
             gameSceneCurrent: '',
             currentCharacter: '',
             dialogueLevel: 0,
@@ -60,6 +71,7 @@ export default {
             heroComments: [],
             answearsNPC: {},
             heroActions: [],
+            shop: [],
             gameData: {},
             questAdd: {},
             gameProgressPoint: [],
@@ -69,7 +81,8 @@ export default {
                 runolvEmptyHouse,
                 horinisGuard,
                 georgFarm,
-                georgFarmWork
+                georgFarmWork,
+                selina
             },
         }
     },
@@ -101,8 +114,37 @@ export default {
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
             'OVERLAY_HIDE_ACT',
-            'HORINIS_SHOW_ACT'
+            'HORINIS_SHOW_ACT',
+            'FRIDRICKFARM_SHOW_ACT',
+            'HERO_HP_UPDATE_ACT'
         ]),
+        buyProduct(event) {
+            var price = event.currentTarget.getAttribute('price');
+            if (price) {
+                var heroGold = this.gameData.hero.heroGold;
+                var heroHP = this.gameData.hero.heroHP;
+                if (heroHP < 100) {
+                    if (price <= heroGold) {
+                        heroGold = heroGold - price;
+                        this.messWindow = `Ты хорошо пообедал (Восстановлено ${price} здоровья)`
+                        this.gameData.hero.heroGold = heroGold;
+                        heroHP = heroHP + Number(price);
+                        if (heroHP > 100) {
+                            heroHP = 100;
+                        }
+                        this.gameData.hero.heroHP = heroHP;
+                        this.HERO_HP_UPDATE_ACT(heroHP);
+                    } else {
+                        this.messWindow = `Недостаточно золота для покупки`
+                    }
+                    // console.log('золото ', heroGold)
+                    // console.log('золото ', heroGold)
+                    // console.log('хитпоинты ', heroHP)
+                } else {
+                    this.messWindow = `Ты не голоден (Здоровье полное)`
+                }
+            }
+        },
         updateData() {
             // Текущая ветка диалога (индекс массива textContent в объекте персонажа) *
             this.dialogueLevel = this.currentCharacter.dialogueLevel;
@@ -122,6 +164,8 @@ export default {
             this.answearsNPC = this.currentCharacter.textContent[this.dialogueLevel].answearsNPC;
             // Действия игрока *
             this.heroActions = this.currentCharacter.textContent[this.dialogueLevel].heroActions;
+            // Магазин *
+            this.shop = this.currentCharacter.textContent[this.dialogueLevel].tavern;
             // Фоновая картинка *
             this.sceneImage = this.currentCharacter.sceneImage;
             // console.log('this.newDialogueBranches ', this.newDialogueBranches);
@@ -138,36 +182,68 @@ export default {
             const actions = {
                 isShowHorinis: () => {
                     this.HORINIS_SHOW_ACT();
+                },
+                isShowFarm: () => {
+                    this.FRIDRICKFARM_SHOW_ACT();
                 }
             }
+            this.gameData.gameProgress[action] = true;
             return actions[action]();
         },
         heroActionEvent(action, event) {
+            var checkLevel = event.currentTarget.getAttribute('level');
             const actions = {
+                // Работа на Георга (уникальная сцена) *
                 workOnGeorgFarm: () => {
                     this.closeScene(3);
                     this.$nextTick(() => {
                         this.sceneRender('georgFarmWork');
                     });
                 },
+                // Вывод комментариев NPC в текущей ветке *
                 counterIndex: (event) => {
                     var targetIndex = event.currentTarget.getAttribute('counter');
                     this.npcComment = this.answearsNPC[targetIndex];
                 },
+                // switchContent(event){
+                //     var checkLevel = event.currentTarget.getAttribute('level');
+                //     if (checkLevel) {
+                //         this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = checkLevel;
+                //     }else{
+                //         var levelType = event.currentTarget.getAttribute('actiontype');
+                //         if(levelType == 'nextContent'){
+                //             this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
+                //         }else{
+                //             this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
+                //         }
+                //     }
+                // },
+                // Переход на новую ветку *
                 nextContent: () => {
-                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
+                    if (checkLevel) {
+                        this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = checkLevel;
+                    } else {
+                        this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
+                    }
                     this.updateData();
                 },
+                // // Возврат к предыдущей *
                 prevContent: () => {
-                    this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
+                    if (checkLevel) {
+                        this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = checkLevel;
+                    } else {
+                        this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
+                    }
                     this.updateData();
                 },
                 closeScene: (event) => {
                     var dialogueLevelAfterClose = event.currentTarget.getAttribute('dialogueLevelAfterClose');
+                    // Если требуется при следующем запуске сцены открыть нужную диалоговую ветку *
                     if (dialogueLevelAfterClose) {
                         this.closeScene(dialogueLevelAfterClose);
                         return;
                     }
+                    // Иначе сцена всегда стартует с первой диалоговой ветки *
                     this.closeScene(0);
                 }
             }
@@ -284,21 +360,27 @@ export default {
     /* background: url("../img/mage_house-loc.jpg") no-repeat center; */
     background-size: cover;
 }
-.dialogue {
+.dialogue,
+.message-window {
     position: absolute;
-    bottom: 18px;
     font-size: 18px;
-    width: 80%;
     padding: 10px 15px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 30;
     border: 1px solid white;
-    -webkit-box-shadow: 0 0 5px 0 white;
-    -moz-box-shadow: 0 0 5px 0 white;
     box-shadow: 0 0 5px 0 white;
     border-radius: 10px;
     background: rgba(238, 210, 161, 0.9);
+}
+
+.dialogue {
+    width: 80%;
+    bottom: 18px;
+}
+
+.message-window {
+    top: 18px;
 }
 
 .dialogue b {

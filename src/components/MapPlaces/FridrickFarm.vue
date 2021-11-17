@@ -2,19 +2,39 @@
     <div class="farm">
         <div class="farm-inner">
             <Tooltip class="gerhard">Сантино</Tooltip>
-            <Tooltip class="fridrick">Фридрик</Tooltip>
-            <Tooltip class="job">Ферма</Tooltip>
+            <Tooltip class="fridrick" v-if="FRIDRICKFARM_INNER_SHOW_STATE">Фридрик</Tooltip>
+            <Tooltip class="job" v-if="FRIDRICKFARM_INNER_SHOW_STATE">Ферма</Tooltip>
         </div>
     </div>
 </template>
 
 <script>
 import Tooltip from '@/components/Buttons/Tooltip.vue';
+// Vuex *
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     name: 'FridrickFarm',
     components: {
         Tooltip
+    },
+    mounted() {
+        if (localStorage.getItem('gameData') != null) {
+            var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+            if (gameDataResponse.gameProgress.isSwowFarmInner) {
+                this.FRIDRICKFARM_INNER_SHOW_ACT();
+            }
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'FRIDRICKFARM_INNER_SHOW_STATE'
+        ]),
+    },
+    methods: {
+        ...mapActions([
+            'FRIDRICKFARM_INNER_SHOW_ACT'
+        ]),
     }
 }
 </script>
