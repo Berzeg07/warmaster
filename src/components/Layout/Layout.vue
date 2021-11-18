@@ -9,6 +9,7 @@
                 <GeorgFarm />
                 <FoggyHollow />
                 <FridrickFarm v-if="FRIDRICKFARM_SHOW_STATE" />
+                <Inventory v-if="INVENTORY_TOGGLE_STATE" :class="checkInvModalState" />
                 <QuestList v-if="QUEST_LIST_STATE" :class="checkQuestModalState" />
                 <Introduction v-if="isShowIntro" @hideIntro="hideIntro" />
             </div>
@@ -46,6 +47,9 @@ import HeroInfoBar from '@/components/Hero/HeroInfoBar.vue';
 // Журнал квестов *
 import QuestList from '@/components/Hero/QuestList.vue';
 
+// Инвентарь *
+import Inventory from '@/components/Hero/Inventory.vue';
+
 // Фоновые картинки *
 import backgroundUrl from "@/assets/img/bg-main.jpg";
 import backgroundMap from "@/assets/img/map.png";
@@ -67,7 +71,8 @@ export default {
         Overlay,
         Introduction,
         DialogueScene,
-        QuestList
+        QuestList,
+        Inventory
     },
     data() {
         return {
@@ -111,6 +116,7 @@ export default {
             'OVERLAY_STATE',
             'QUEST_LIST_STATE',
             'FRIDRICKFARM_SHOW_STATE',
+            'INVENTORY_TOGGLE_STATE'
         ]),
 
         checkModalState() {
@@ -118,6 +124,9 @@ export default {
         },
         checkQuestModalState() {
             return this.QUEST_LIST_STATE == true ? this.modalShow : '';
+        },
+        checkInvModalState() {
+            return this.INVENTORY_TOGGLE_STATE == true ? this.modalShow : '';
         }
     },
     methods: {

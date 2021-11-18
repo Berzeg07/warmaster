@@ -21,7 +21,7 @@ export default {
     name: 'QuestList',
     data() {
         return {
-            upHere: false,
+            // upHere: false,
             gameData: {}
         }
     },

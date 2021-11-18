@@ -6,6 +6,7 @@ export var dataBase = {
         isShowFarm: false,
         isSwowFarmInner: false,
         isShowHeroHouse: true,
+        // Не забыть активировать Андреаса в разговоре с Фридриком !!!!!!!
         isTrainAndreas: true
     },
     newDialogueComments: {

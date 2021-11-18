@@ -2,7 +2,7 @@
     <div class="hero-infobar">
         <div class="hero-infobar_btn">
             <Button @click.native="questListToggle" class="panel-journal_btn">Журнал</Button>
-            <Button class="panel-inv_btn">Инвентарь</Button>
+            <Button @click.native="inventoryToggle" class="panel-inv_btn">Инвентарь</Button>
         </div>
         <ul class="hero-skill">
             <li>
@@ -67,7 +67,8 @@ export default {
         ...mapGetters([
             'HERO_HP_STATE',
             'HERO_GOLD_STATE',
-            'HERO_DAMAGE_STATE'
+            'HERO_DAMAGE_STATE',
+            // 'INVENTORY_TOGGLE_STATE'
         ]),
     },
     methods: {
@@ -76,11 +77,16 @@ export default {
             'OVERLAY_SHOW_ACT',
             'HERO_HP_UPDATE_ACT',
             'HERO_GOLD_UPDATE_ACT',
-            'HERO_DAMAGE_UPDATE_ACT'
+            'HERO_DAMAGE_UPDATE_ACT',
+            'INVENTORY_TOGGLE_ACT'
         ]),
         questListToggle() {
             this.QUEST_LIST_TOGGLE_ACT();
             this.OVERLAY_SHOW_ACT();
+        },
+        inventoryToggle() {
+            this.INVENTORY_TOGGLE_ACT();
+            // console.log(this.INVENTORY_TOGGLE_STATE)
         }
     }
 }

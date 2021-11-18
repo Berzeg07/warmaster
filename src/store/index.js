@@ -12,6 +12,8 @@ export default new Vuex.Store({
     modalShow: false,
     // Журнал квестов *
     questListShow: false,
+    // Инвентарь *
+    inventoryShow: false,
     // Доступность локаций на карте *
     isShowPlace: {
       horinis: false,
@@ -30,6 +32,9 @@ export default new Vuex.Store({
     intro: true
   },
   mutations: {
+    INVENTORY_TOGGLE(state) {
+      state.inventoryShow = !state.inventoryShow;
+    },
     ANDREAS_TRAIN_UPDATE(state) {
       state.isShowPlace.isTrainAndreas = true;
     },
@@ -74,6 +79,9 @@ export default new Vuex.Store({
     ANDREAS_TRAIN_UPDATE_ACT(context) {
       context.commit('ANDREAS_TRAIN_UPDATE');
     },
+    INVENTORY_TOGGLE_ACT(context) {
+      context.commit('INVENTORY_TOGGLE');
+    },
     HERO_GOLD_UPDATE_ACT(context, currentGold) {
       context.commit('HERO_GOLD_UPDATE', currentGold);
     },
@@ -112,6 +120,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    INVENTORY_TOGGLE_STATE(state) {
+      return state.inventoryShow
+    },
     ANDREAS_TRAIN_STATE(state) {
       return state.isShowPlace.isTrainAndreas
     },

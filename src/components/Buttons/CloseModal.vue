@@ -32,7 +32,8 @@ export default {
     methods: {
         ...mapActions([
             'QUEST_LIST_TOGGLE_ACT',
-            'OVERLAY_HIDE_ACT'
+            'OVERLAY_HIDE_ACT',
+            'INVENTORY_TOGGLE_ACT'
         ]),
         closeIconBg() {
             if (this.upHere != true) {
@@ -45,6 +46,9 @@ export default {
             if (this.modalElement == 'questList') {
                 this.QUEST_LIST_TOGGLE_ACT();
                 this.OVERLAY_HIDE_ACT();
+            }
+            if (this.modalElement == 'inventoryList') {
+                this.INVENTORY_TOGGLE_ACT();
             }
         }
     }
