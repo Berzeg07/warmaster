@@ -50,6 +50,8 @@ import georgFarm from "@/assets/img/georg-loc.jpg";
 import georgFarmWork from "@/assets/img/farm-loc.jpg";
 import selina from "@/assets/img/tavern-loc.jpg";
 import heroHouse from "@/assets/img/house-loc.jpg";
+import andreas from "@/assets/img/andreas-loc.jpg";
+
 
 // Миксины *
 import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
@@ -85,7 +87,8 @@ export default {
                 georgFarm,
                 georgFarmWork,
                 selina,
-                heroHouse
+                heroHouse,
+                andreas
             },
         }
     },
@@ -106,7 +109,8 @@ export default {
     computed: {
         ...mapGetters([
             'MODAL_SHOW_STATE',
-            'HEROHOUSE_SHOW_STATE'
+            'HEROHOUSE_SHOW_STATE',
+            'ANDREAS_TRAIN_STATE'
         ]),
         sceneData() {
             // Фоновая картинки сцены * 
@@ -122,12 +126,36 @@ export default {
             'FRIDRICKFARM_SHOW_ACT',
             'HERO_HP_UPDATE_ACT',
             'HERO_GOLD_UPDATE_ACT',
-            'HEROHOUSE_SHOW_ACT'
+            'HEROHOUSE_SHOW_ACT',
+            'HERO_DAMAGE_UPDATE_ACT'
+            // 'ANDREAS_TRAIN_UPDATE_ACT'
         ]),
         shopActions(action, event) {
             var price = event.currentTarget.getAttribute('price');
             var heroGold = this.gameData.hero.heroGold;
             const actions = {
+                traning: () => {
+                    var heroCurrentDamage = this.gameData.hero.heroDamage;
+                    console.log('Андреас ', this.ANDREAS_TRAIN_STATE)
+                    if (this.ANDREAS_TRAIN_STATE) {
+                        if (heroCurrentDamage < 15) {
+                            if (price <= heroGold) {
+                                heroGold = heroGold - price;
+                                heroCurrentDamage++;
+                                this.gameData.hero.heroDamage = heroCurrentDamage;
+                                this.gameData.hero.heroGold = heroGold;
+                                this.messWindow = `Ты хорошо потренировался, сила увеличена на 1`
+                                this.HERO_DAMAGE_UPDATE_ACT(heroCurrentDamage);
+                            } else {
+                                this.messWindow = `Недостаточно золота для тренировок`
+                            }
+                        } else {
+                            this.messWindow = `Ты уже достаточно силен, больше учиться нечему`
+                        }
+                    } else {
+                        this.messWindow = `Андреас: я не тренерую всех подряд! Тебя я незнаю`
+                    }
+                },
                 product: () => {
                     var heroHP = this.gameData.hero.heroHP;
                     if (heroHP < 100) {

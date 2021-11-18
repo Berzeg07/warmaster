@@ -125,7 +125,7 @@ export default {
             'OVERLAY_HIDE_ACT',
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
-            'FRIDRICKFARM_SHOW_ACT'
+            'FRIDRICKFARM_SHOW_ACT',
         ]),
         hideIntro(data) {
             this.isShowIntro = data.intro;

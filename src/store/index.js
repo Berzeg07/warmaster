@@ -18,16 +18,24 @@ export default new Vuex.Store({
       fridrickFarm: false,
       fridrickFarmInner: false,
       heroHouse: false,
-      bernard: false
+      bernard: false,
+      isTrainAndreas: false
     },
     hero: {
       heroHP: 100,
-      heroGold: 100
+      heroGold: 100,
+      heroDamage: 10
     },
     // Вступительный экран *
     intro: true
   },
   mutations: {
+    ANDREAS_TRAIN_UPDATE(state) {
+      state.isShowPlace.isTrainAndreas = true;
+    },
+    HERO_DAMAGE_UPDATE(state, currentDamage) {
+      state.hero.heroDamage = currentDamage;
+    },
     HERO_GOLD_UPDATE(state, currentGold) {
       state.hero.heroGold = currentGold;
     },
@@ -63,8 +71,14 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    ANDREAS_TRAIN_UPDATE_ACT(context) {
+      context.commit('ANDREAS_TRAIN_UPDATE');
+    },
     HERO_GOLD_UPDATE_ACT(context, currentGold) {
       context.commit('HERO_GOLD_UPDATE', currentGold);
+    },
+    HERO_DAMAGE_UPDATE_ACT(context, currentDamage) {
+      context.commit('HERO_DAMAGE_UPDATE', currentDamage);
     },
     HERO_HP_UPDATE_ACT(context, currentHitpoint) {
       context.commit('HERO_HP_UPDATE', currentHitpoint);
@@ -98,6 +112,12 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    ANDREAS_TRAIN_STATE(state) {
+      return state.isShowPlace.isTrainAndreas
+    },
+    HERO_DAMAGE_STATE(state) {
+      return state.hero.heroDamage;
+    },
     HERO_GOLD_STATE(state) {
       return state.hero.heroGold;
     },

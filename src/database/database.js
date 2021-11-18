@@ -5,7 +5,8 @@ export var dataBase = {
         isShowHorinis: true,
         isShowFarm: false,
         isSwowFarmInner: false,
-        isShowHeroHouse: true
+        isShowHeroHouse: true,
+        isTrainAndreas: true
     },
     newDialogueComments: {
         georgFarm: {
@@ -42,6 +43,55 @@ export var dataBase = {
         }]
     },
     charactersNPC: {
+        andreas: {
+            npcName: 'Андреас',
+            dialogueLevel: 0,
+            sceneImage: 'andreas',
+            textContent: [
+                {
+                    textNPC: 'Говори по делу',
+                    heroComments: [],
+                    shop: [
+                        {
+                            product: 'Тренироваться',
+                            price: 200,
+                            attr: 'traning'
+                        }
+                    ],
+                    heroActions: [
+                        {
+                            text: 'Говорить',
+                            attr: 'nextContent'
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'Говори по делу',
+                    heroComments: ['Чем ты занимаешься?', 'Чему ты можешь научить?', 'Какое примущество у критического удара?', 'Ты состоишь в обороне города?'],
+                    answearsNPC: {
+                        0: 'Жду торговое судно, чтобы свалить из этого гиблого места',
+                        1: 'Я учу бить сильно и наверняка, после моих занятий твои удары станут сильнее',
+                        2: 'Критический удар увеличит твою атаку вдвое, но и враги имеют эту особенность, тут уж как повезет',
+                        3: 'Оно мне надо? я выжил в стольких битвах, что могу тебе точно сказать, город обречен. Оружия не хватает, продовольствия мало, людей мало, а половина из тех кто есть впервые взяли в руки оружие. Безрассудная смерть не в моих планах, скоро я покину это место погибели',
+                        4: 'Чтобы стать гражданином ты должен себя в чем то проявить, показать, что способен принести городу пользу. Сгодится и охотничье дело, я поручусь за тебя, если добудешь мне три хвоста болотной крысы и две шкуры варга'
+                    },
+                    heroActions: [
+                        {
+                            text: 'Назад',
+                            attr: 'prevContent'
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                }
+            ]
+        },
         heroHouse: {
             dialogueLevel: 0,
             sceneImage: 'heroHouse',

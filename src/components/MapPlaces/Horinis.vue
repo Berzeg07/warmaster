@@ -2,7 +2,7 @@
     <div class="horinis">
         <div class="horinis-inner">
             <div class="block-loc" v-if="HORINIS_SHOW_STATE">
-                <Tooltip class="andreas">Андреас</Tooltip>
+                <Tooltip @click.native="showScene('andreas', $event)" class="andreas">Андреас</Tooltip>
                 <Tooltip @click.native="showScene('selina', $event)" class="tavern">Таверна</Tooltip>
                 <Tooltip
                     @click.native="showScene('heroHouse', $event)"
@@ -44,13 +44,17 @@ export default {
             if (gameDataResponse.gameProgress.isShowHeroHouse) {
                 this.HEROHOUSE_SHOW_ACT();
             }
+            if (gameDataResponse.gameProgress.isTrainAndreas) {
+                this.ANDREAS_TRAIN_UPDATE_ACT();
+            }
         }
     },
     computed: {
         ...mapGetters([
             'HORINIS_SHOW_STATE',
             'HEROHOUSE_SHOW_STATE',
-            'BERNARD_SHOW_STATE'
+            'BERNARD_SHOW_STATE',
+            'ANDREAS_TRAIN_STATE'
         ]),
     },
     methods: {
@@ -58,7 +62,8 @@ export default {
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
             'HORINIS_SHOW_ACT',
-            'HEROHOUSE_SHOW_ACT'
+            'HEROHOUSE_SHOW_ACT',
+            'ANDREAS_TRAIN_UPDATE_ACT'
         ]),
         showScene(scene, event) {
             var gameDataResponse = this.sceneRender(scene);

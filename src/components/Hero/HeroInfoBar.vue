@@ -7,7 +7,7 @@
         <ul class="hero-skill">
             <li>
                 <span>Урон:</span>
-                <span>{{ gameData.heroDamage }}</span>
+                <span>{{ HERO_DAMAGE_STATE }}</span>
             </li>
             <li>
                 <span>Броня:</span>
@@ -60,12 +60,14 @@ export default {
             this.gameData = gameDataResponse.hero;
             this.HERO_HP_UPDATE_ACT(this.gameData.heroHP);
             this.HERO_GOLD_UPDATE_ACT(this.gameData.heroGold);
+            this.HERO_DAMAGE_UPDATE_ACT(this.gameData.heroDamage);
         }
     },
     computed: {
         ...mapGetters([
             'HERO_HP_STATE',
-            'HERO_GOLD_STATE'
+            'HERO_GOLD_STATE',
+            'HERO_DAMAGE_STATE'
         ]),
     },
     methods: {
@@ -73,7 +75,8 @@ export default {
             'QUEST_LIST_TOGGLE_ACT',
             'OVERLAY_SHOW_ACT',
             'HERO_HP_UPDATE_ACT',
-            'HERO_GOLD_UPDATE_ACT'
+            'HERO_GOLD_UPDATE_ACT',
+            'HERO_DAMAGE_UPDATE_ACT'
         ]),
         questListToggle() {
             this.QUEST_LIST_TOGGLE_ACT();
