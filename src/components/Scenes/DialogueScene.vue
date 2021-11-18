@@ -4,7 +4,7 @@
             <div class="message-window" v-if="messWindow">{{ messWindow }}</div>
             <div class="dialogue">
                 <p class="dialogue_article">
-                    <b v-if="npcName != ''">{{ npcName + ':' + ' ' }}</b>
+                    <b v-if="npcName">{{ npcName + ':' + ' ' }}</b>
                     <span>{{ npcComment }}</span>
                 </p>
                 <div class="btn-block btn-block_dialogue">
@@ -19,10 +19,11 @@
                         >- {{ item }}</li>
                         <!-- Магазин -->
                         <li
-                            @click="buyProduct"
+                            @click="shopEvent"
                             v-for="item in shop"
                             :key="item.product"
                             :price="item.price"
+                            :data-type="item.attr"
                         >- {{ item.product }} ({{ item.price }} монет)</li>
                         <!-- Действия игрока -->
                         <li
@@ -48,6 +49,7 @@ import horinisGuard from "@/assets/img/guard-loc.jpg";
 import georgFarm from "@/assets/img/georg-loc.jpg";
 import georgFarmWork from "@/assets/img/farm-loc.jpg";
 import selina from "@/assets/img/tavern-loc.jpg";
+import heroHouse from "@/assets/img/house-loc.jpg";
 
 // Миксины *
 import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
@@ -82,7 +84,8 @@ export default {
                 horinisGuard,
                 georgFarm,
                 georgFarmWork,
-                selina
+                selina,
+                heroHouse
             },
         }
     },
@@ -102,7 +105,8 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'MODAL_SHOW_STATE'
+            'MODAL_SHOW_STATE',
+            'HEROHOUSE_SHOW_STATE'
         ]),
         sceneData() {
             // Фоновая картинки сцены * 
@@ -116,34 +120,60 @@ export default {
             'OVERLAY_HIDE_ACT',
             'HORINIS_SHOW_ACT',
             'FRIDRICKFARM_SHOW_ACT',
-            'HERO_HP_UPDATE_ACT'
+            'HERO_HP_UPDATE_ACT',
+            'HERO_GOLD_UPDATE_ACT',
+            'HEROHOUSE_SHOW_ACT'
         ]),
-        buyProduct(event) {
+        shopActions(action, event) {
             var price = event.currentTarget.getAttribute('price');
-            if (price) {
-                var heroGold = this.gameData.hero.heroGold;
-                var heroHP = this.gameData.hero.heroHP;
-                if (heroHP < 100) {
-                    if (price <= heroGold) {
-                        heroGold = heroGold - price;
-                        this.messWindow = `Ты хорошо пообедал (Восстановлено ${price} здоровья)`
-                        this.gameData.hero.heroGold = heroGold;
-                        heroHP = heroHP + Number(price);
-                        if (heroHP > 100) {
-                            heroHP = 100;
+            var heroGold = this.gameData.hero.heroGold;
+            const actions = {
+                product: () => {
+                    var heroHP = this.gameData.hero.heroHP;
+                    if (heroHP < 100) {
+                        if (price <= heroGold) {
+                            heroGold = heroGold - price;
+                            this.messWindow = `Ты хорошо пообедал (Восстановлено ${price} здоровья)`
+                            this.gameData.hero.heroGold = heroGold;
+                            heroHP = heroHP + Number(price);
+                            if (heroHP > 100) {
+                                heroHP = 100;
+                            }
+                            this.gameData.hero.heroHP = heroHP;
+                            this.HERO_HP_UPDATE_ACT(heroHP);
+                            this.HERO_GOLD_UPDATE_ACT(heroGold);
+                        } else {
+                            this.messWindow = `Недостаточно золота для покупки`
                         }
-                        this.gameData.hero.heroHP = heroHP;
-                        this.HERO_HP_UPDATE_ACT(heroHP);
                     } else {
-                        this.messWindow = `Недостаточно золота для покупки`
+                        this.messWindow = `Ты не голоден (Здоровье полное)`
                     }
-                    // console.log('золото ', heroGold)
-                    // console.log('золото ', heroGold)
-                    // console.log('хитпоинты ', heroHP)
-                } else {
-                    this.messWindow = `Ты не голоден (Здоровье полное)`
+                },
+                renta: () => {
+                    if (!this.HEROHOUSE_SHOW_STATE) {
+                        if (price <= heroGold) {
+                            heroGold = heroGold - price;
+                            this.gameData.hero.heroGold = heroGold;
+                            this.gameData.gameProgress.isShowHeroHouse = true;
+                            this.messWindow = 'Дом арендован можно въезжать'
+                            this.HERO_GOLD_UPDATE_ACT(heroGold);
+                            this.HEROHOUSE_SHOW_ACT();
+                        } else {
+                            this.messWindow = 'Не достаточно денег для аренды'
+                        }
+                    } else {
+                        this.messWindow = 'Дом уже арендован'
+                    }
                 }
             }
+            setTimeout(() => {
+                this.messWindow = '';
+            }, 2500);
+            return actions[action]();
+        },
+        shopEvent(event) {
+            var action = event.currentTarget.getAttribute('data-type');
+            this.shopActions(action, event);
         },
         updateData() {
             // Текущая ветка диалога (индекс массива textContent в объекте персонажа) *
@@ -165,7 +195,7 @@ export default {
             // Действия игрока *
             this.heroActions = this.currentCharacter.textContent[this.dialogueLevel].heroActions;
             // Магазин *
-            this.shop = this.currentCharacter.textContent[this.dialogueLevel].tavern;
+            this.shop = this.currentCharacter.textContent[this.dialogueLevel].shop;
             // Фоновая картинка *
             this.sceneImage = this.currentCharacter.sceneImage;
             // console.log('this.newDialogueBranches ', this.newDialogueBranches);
@@ -193,7 +223,19 @@ export default {
         heroActionEvent(action, event) {
             var checkLevel = event.currentTarget.getAttribute('level');
             const actions = {
-                // Работа на Георга (уникальная сцена) *
+                // Отдых дома *
+                rest: () => {
+                    var heroHP = this.gameData.hero.heroHP;
+                    if (heroHP < 75) {
+                        heroHP = 75;
+                        this.gameData.hero.heroHP = heroHP;
+                        this.messWindow = 'Ты хорошо отдохнул, часть здоровья восстановлено';
+                        this.HERO_HP_UPDATE_ACT(heroHP);
+                    } else {
+                        this.messWindow = 'Ты хорошо отдохнул';
+                    }
+                },
+                // Работа на Георга *
                 workOnGeorgFarm: () => {
                     this.closeScene(3);
                     this.$nextTick(() => {
@@ -205,19 +247,6 @@ export default {
                     var targetIndex = event.currentTarget.getAttribute('counter');
                     this.npcComment = this.answearsNPC[targetIndex];
                 },
-                // switchContent(event){
-                //     var checkLevel = event.currentTarget.getAttribute('level');
-                //     if (checkLevel) {
-                //         this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = checkLevel;
-                //     }else{
-                //         var levelType = event.currentTarget.getAttribute('actiontype');
-                //         if(levelType == 'nextContent'){
-                //             this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
-                //         }else{
-                //             this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel--;
-                //         }
-                //     }
-                // },
                 // Переход на новую ветку *
                 nextContent: () => {
                     if (checkLevel) {
@@ -227,7 +256,7 @@ export default {
                     }
                     this.updateData();
                 },
-                // // Возврат к предыдущей *
+                // Возврат к предыдущей *
                 prevContent: () => {
                     if (checkLevel) {
                         this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = checkLevel;
@@ -236,6 +265,7 @@ export default {
                     }
                     this.updateData();
                 },
+                // Закрытие сцены *
                 closeScene: (event) => {
                     var dialogueLevelAfterClose = event.currentTarget.getAttribute('dialogueLevelAfterClose');
                     // Если требуется при следующем запуске сцены открыть нужную диалоговую ветку *
@@ -243,10 +273,13 @@ export default {
                         this.closeScene(dialogueLevelAfterClose);
                         return;
                     }
-                    // Иначе сцена всегда стартует с первой диалоговой ветки *
+                    // Иначе, сцена всегда стартует с первой диалоговой ветки *
                     this.closeScene(0);
                 }
             }
+            setTimeout(() => {
+                this.messWindow = '';
+            }, 2500);
             return actions[action](event);
         },
         heroCommentlistClick(event) {

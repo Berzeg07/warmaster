@@ -21,12 +21,16 @@ export default new Vuex.Store({
       bernard: false
     },
     hero: {
-      heroHP: 100
+      heroHP: 100,
+      heroGold: 100
     },
     // Вступительный экран *
     intro: true
   },
   mutations: {
+    HERO_GOLD_UPDATE(state, currentGold) {
+      state.hero.heroGold = currentGold;
+    },
     HERO_HP_UPDATE(state, currentHitpoint) {
       state.hero.heroHP = currentHitpoint;
     },
@@ -59,6 +63,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    HERO_GOLD_UPDATE_ACT(context, currentGold) {
+      context.commit('HERO_GOLD_UPDATE', currentGold);
+    },
     HERO_HP_UPDATE_ACT(context, currentHitpoint) {
       context.commit('HERO_HP_UPDATE', currentHitpoint);
     },
@@ -91,6 +98,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    HERO_GOLD_STATE(state) {
+      return state.hero.heroGold;
+    },
     HERO_HP_STATE(state) {
       return state.hero.heroHP;
     },

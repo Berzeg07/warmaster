@@ -23,7 +23,7 @@
             </li>
             <li>
                 <span>Золото:</span>
-                <span>{{ gameData.heroGold }}</span>
+                <span>{{ HERO_GOLD_STATE }}</span>
             </li>
         </ul>
         <ul class="hero-equip">
@@ -56,22 +56,24 @@ export default {
     },
     mounted() {
         if (localStorage.getItem('gameData') != null) {
-            // Получаем данные *
             var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
             this.gameData = gameDataResponse.hero;
             this.HERO_HP_UPDATE_ACT(this.gameData.heroHP);
+            this.HERO_GOLD_UPDATE_ACT(this.gameData.heroGold);
         }
     },
     computed: {
         ...mapGetters([
-            'HERO_HP_STATE'
+            'HERO_HP_STATE',
+            'HERO_GOLD_STATE'
         ]),
     },
     methods: {
         ...mapActions([
             'QUEST_LIST_TOGGLE_ACT',
             'OVERLAY_SHOW_ACT',
-            'HERO_HP_UPDATE_ACT'
+            'HERO_HP_UPDATE_ACT',
+            'HERO_GOLD_UPDATE_ACT'
         ]),
         questListToggle() {
             this.QUEST_LIST_TOGGLE_ACT();

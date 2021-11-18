@@ -2,9 +2,10 @@ export var dataBase = {
     gameSceneCurrent: 'intro',
     gameFightScene: false,
     gameProgress: {
-        isShowHorinis: false,
+        isShowHorinis: true,
         isShowFarm: false,
-        isSwowFarmInner: false
+        isSwowFarmInner: false,
+        isShowHeroHouse: true
     },
     newDialogueComments: {
         georgFarm: {
@@ -41,6 +42,26 @@ export var dataBase = {
         }]
     },
     charactersNPC: {
+        heroHouse: {
+            dialogueLevel: 0,
+            sceneImage: 'heroHouse',
+            textContent: [
+                {
+                    textNPC: 'Дом, милый дом (отдых восстанавливает до 75% здоровья)',
+                    heroComments: [],
+                    heroActions: [
+                        {
+                            text: 'Отдыхать',
+                            attr: 'rest'
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                }
+            ]
+        },
         selina: {
             npcName: 'Селина',
             dialogueLevel: 0,
@@ -62,7 +83,7 @@ export var dataBase = {
                         {
                             text: 'Аренда дома',
                             attr: 'nextContent',
-                            level: 2
+                            level: 4
                         },
                         {
                             text: 'Уйти',
@@ -114,14 +135,16 @@ export var dataBase = {
                 },
                 {
                     textNPC: 'Лучшее жаркое в Хэртланде :)',
-                    tavern: [
+                    shop: [
                         {
                             product: 'Жаркое с шампиньонами',
-                            price: 50
+                            price: 50,
+                            attr: 'product'
                         },
                         {
                             product: 'Лосось с картофелем',
-                            price: 25
+                            price: 25,
+                            attr: 'product'
                         }
                     ],
                     heroActions: [
@@ -134,6 +157,23 @@ export var dataBase = {
                             text: 'Уйти',
                             attr: 'closeScene'
                         },
+                    ],
+                },
+                {
+                    textNPC: 'Просторное помещение, чистое постельное белье и никаких клопов :)',
+                    shop: [
+                        {
+                            product: 'Аренда дома (отдых восстаналивает до 75% здоровья)',
+                            price: 250,
+                            attr: 'renta'
+                        },
+                    ],
+                    heroActions: [
+                        {
+                            text: 'Назад',
+                            attr: 'prevContent',
+                            level: 0
+                        }
                     ],
                 }
             ]
