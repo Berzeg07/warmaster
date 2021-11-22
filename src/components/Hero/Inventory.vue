@@ -2,27 +2,29 @@
     <div class="modal modal-show inv-block">
         <p class="modal-title">Инвентарь</p>
         <CloseModal modalElement="inventoryList" />
-        <p></p>
+        <!-- <p>{{ checkedItem }}</p> -->
         <ul class="invlist">
-            <li>
+            <li v-for="(item) in inventory" :key="item.nameItem">
                 <label>
-                    <input type="radio" value="Кожаная броня" name="hero_item" /> Кожаная броня -
-                    <span>100</span> (Броня:
-                    <em>5</em>) -
-                    <i>1</i> шт.
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="radio" value="Полуторный меч" name="hero_item" /> Полуторный меч -
-                    <span>125</span> (Урон:
-                    <em>10</em>) -
-                    <i>1</i> шт.
+                    <input
+                        type="radio"
+                        :value="item.nameItem"
+                        name="hero_item"
+                        v-model="checkedItem"
+                    />
+                    {{ item.nameItem }}
+                    <span>{{ item.priceItem }}</span>
+                    ({{ item.typeItem }}:
+                    <em>{{ item.propertiesItem }}</em>) -
+                    <i>{{ item.countItem }}</i> шт.
                 </label>
             </li>
         </ul>
         <div class="btn-block btn-block_inv">
-            <Button>Экипировать</Button>
+            <div class="tooltip-inner" v-if="isEquip">
+                <p>{{ isEquip }}</p>
+            </div>
+            <Button @click.native="equipItem(checkedItem)">Экипировать</Button>
         </div>
     </div>
 </template>
@@ -32,12 +34,80 @@
 import CloseModal from '@/components/Buttons/CloseModal.vue';
 // Кнопки *
 import Button from '@/components/Buttons/Button.vue';
+// Vuex *
+import { mapActions } from 'vuex'
+// Миксины *
+import { findWithKey } from '@/mixins/mixins';
 
 export default {
     name: 'Inventory',
+    mixins: [findWithKey],
     components: {
         CloseModal,
         Button
+    },
+    data() {
+        return {
+            gameData: {},
+            inventory: [],
+            checkedItem: false,
+            isEquip: ''
+        }
+    },
+    mounted() {
+        if (localStorage.getItem('gameData') != null) {
+            var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+            this.gameData = gameDataResponse;
+            this.inventory = gameDataResponse.hero.inventory;
+        }
+    },
+    methods: {
+        ...mapActions([
+            'HERO_DAMAGE_UPDATE_ACT',
+            'HERO_ARMOR_ACT',
+            'HERO_EQUIP_ACT',
+            'HERO_WEAPON_ACT',
+            'WEAPON_CLASS_ACT',
+            'EQUIP_CLASS_ACT'
+        ]),
+        equipItem(itemName) {
+            if (itemName) {
+                var indexItem = this.findWithKey(this.inventory, 'nameItem', itemName),
+                    checkItem = this.inventory[indexItem],
+                    checkType = checkItem.typeItem;
+                if (checkType == "Предмет") {
+                    this.isEquip = 'Данный предмет невозможно экипировать';
+                }
+                if (checkType == 'Урон') {
+                    var weaponClass = checkItem.classItem;
+                    var weaponDamage = checkItem.propertiesItem;
+                    var currentDamage = this.gameData.hero.heroDamage + weaponDamage;
+                    this.HERO_DAMAGE_UPDATE_ACT(currentDamage);
+                    this.WEAPON_CLASS_ACT(weaponClass);
+                    this.HERO_WEAPON_ACT(itemName);
+                    this.gameData.hero.heroWeapon = itemName;
+                    this.gameData.hero.weaponDamage = weaponDamage;
+                    localStorage.setItem("gameData", JSON.stringify(this.gameData));
+                }
+                if (checkType == 'Броня') {
+                    var equipClass = checkItem.classItem;
+                    var equipArmor = checkItem.propertiesItem;
+                    this.HERO_ARMOR_ACT(equipArmor);
+                    this.EQUIP_CLASS_ACT(equipClass);
+                    this.HERO_EQUIP_ACT(itemName);
+                    this.gameData.hero.heroEquip = itemName;
+                    this.gameData.hero.heroArmor = equipArmor;
+                    localStorage.setItem("gameData", JSON.stringify(this.gameData));
+                }
+            } else {
+                this.isEquip = 'Выбери предмет';
+            }
+            if (this.isEquip != '') {
+                setTimeout(() => {
+                    this.isEquip = '';
+                }, 2500);
+            }
+        }
     },
 }
 </script>
@@ -73,7 +143,6 @@ export default {
 .inv-block em {
     font-style: inherit;
 }
-
 .inv-block em {
     color: palegoldenrod;
     padding-left: 5px;
@@ -101,5 +170,30 @@ export default {
     padding: 5px 0 10px;
     margin-bottom: 10px;
     color: orange;
+}
+.tooltip-inner {
+    position: absolute;
+    top: -35px;
+    left: 20px;
+    padding: 5px 7px;
+    color: black;
+    font-size: 17px;
+    background: #f4c56f;
+    text-align: center;
+    display: inline-block;
+    border-radius: 5px;
+}
+.tooltip-inner p {
+    position: relative;
+}
+.tooltip-inner p:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -19px;
+    width: 0;
+    height: 0;
+    border-top: 15px solid #f4c56f;
+    border-right: 14px solid transparent;
 }
 </style>

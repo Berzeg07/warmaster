@@ -26,20 +26,40 @@ export default new Vuex.Store({
     hero: {
       heroHP: 100,
       heroGold: 100,
-      heroDamage: 10
+      heroDamage: 10,
+      heroArmor: 0,
+      heroWeapon: 'Пусто',
+      heroEquip: 'Пусто',
+      weaponClass: '',
+      equipClass: ''
     },
     // Вступительный экран *
     intro: true
   },
   mutations: {
+    HERO_DAMAGE_UPDATE(state, currentDamage) {
+      state.hero.heroDamage = currentDamage;
+    },
+    HERO_ARMOR_UPDATE(state, currentArmor) {
+      state.hero.heroArmor = currentArmor;
+    },
+    HERO_WEAPON_UPDATE(state, currentWeapon) {
+      state.hero.heroWeapon = currentWeapon;
+    },
+    WEAPON_CLASS_UPDATE(state, className) {
+      state.hero.weaponClass = className;
+    },
+    HERO_EQUIP_UPDATE(state, currentEquip) {
+      state.hero.heroEquip = currentEquip;
+    },
+    EQUIP_CLASS_UPDATE(state, className) {
+      state.hero.equipClass = className;
+    },
     INVENTORY_TOGGLE(state) {
       state.inventoryShow = !state.inventoryShow;
     },
     ANDREAS_TRAIN_UPDATE(state) {
       state.isShowPlace.isTrainAndreas = true;
-    },
-    HERO_DAMAGE_UPDATE(state, currentDamage) {
-      state.hero.heroDamage = currentDamage;
     },
     HERO_GOLD_UPDATE(state, currentGold) {
       state.hero.heroGold = currentGold;
@@ -76,6 +96,21 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    WEAPON_CLASS_ACT(context, className) {
+      context.commit('WEAPON_CLASS_UPDATE', className);
+    },
+    EQUIP_CLASS_ACT(context, className) {
+      context.commit('EQUIP_CLASS_UPDATE', className);
+    },
+    HERO_ARMOR_ACT(context, currentArmor) {
+      context.commit('HERO_ARMOR_UPDATE', currentArmor);
+    },
+    HERO_WEAPON_ACT(context, currentWeapon) {
+      context.commit('HERO_WEAPON_UPDATE', currentWeapon);
+    },
+    HERO_EQUIP_ACT(context, currentEquip) {
+      context.commit('HERO_EQUIP_UPDATE', currentEquip);
+    },
     ANDREAS_TRAIN_UPDATE_ACT(context) {
       context.commit('ANDREAS_TRAIN_UPDATE');
     },
@@ -120,6 +155,21 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    WEAPON_CLASS_STATE(state) {
+      return state.hero.weaponClass;
+    },
+    EQUIP_CLASS_STATE(state) {
+      return state.hero.equipClass;
+    },
+    HERO_ARMOR_STATE(state) {
+      return state.hero.heroArmor;
+    },
+    HERO_WEAPON_STATE(state) {
+      return state.hero.heroWeapon;
+    },
+    HERO_EQUIP_STATE(state) {
+      return state.hero.heroEquip;
+    },
     INVENTORY_TOGGLE_STATE(state) {
       return state.inventoryShow
     },

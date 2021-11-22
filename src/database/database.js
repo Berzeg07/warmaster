@@ -31,13 +31,76 @@ export var dataBase = {
     hero: {
         heroName: 'Герой',
         heroDamage: 10,
+        weaponDamage: 0,
         heroArmor: 0,
+        // equipArmor: 0,
         heroCrit: 20,
         heroHP: 10,
         heroGold: 1000,
         heroWeapon: 'Пусто',
         heroEquip: 'Пусто',
-        inventory: [{}],
+        inventory: [
+            {
+                nameItem: 'Меч Беллиара',
+                typeItem: 'Урон',
+                priceItem: '1000',
+                propertiesItem: 30,
+                classItem: 'destroyer',
+                countItem: 2
+            },
+            {
+                nameItem: 'Сокрушитель',
+                typeItem: 'Урон',
+                priceItem: '1000',
+                propertiesItem: 25,
+                classItem: 'axe',
+                countItem: 2
+            },
+            {
+                nameItem: 'Кожаная броня',
+                typeItem: 'Броня',
+                priceItem: '1000',
+                propertiesItem: 5,
+                classItem: 'leatherarmor',
+                countItem: 2
+            },
+            {
+                nameItem: 'Панцирь Дракона',
+                typeItem: 'Броня',
+                priceItem: '1000',
+                propertiesItem: 15,
+                classItem: 'dragonarmor',
+                countItem: 2
+            },
+            {
+                nameItem: 'Шкура варга',
+                typeItem: 'Предмет',
+                priceItem: 150,
+                propertiesItem: 'Для продажи',
+                countItem: 2
+            },
+            {
+                nameItem: 'Рог мракориса',
+                typeItem: 'Предмет',
+                priceItem: 150,
+                propertiesItem: 'Для продажи',
+                countItem: 10
+            },
+            {
+                nameItem: 'Слиток стали',
+                typeItem: 'Предмет',
+                priceItem: '110',
+                propertiesItem: 'Ковка',
+                countItem: 10
+            },
+            {
+                nameItem: 'Хвост крысы',
+                typeItem: 'Предмет',
+                priceItem: 150,
+                propertiesItem: 'Для продажи',
+                countItem: 3
+            }
+        ],
         questList: [{
             questTitle: 'Начало',
             questArticle: ['Добрый маг привел меня в чувство и дал не много денег. Нужно добраться до города и осмотреться, может подвернеться какое ни будь дельце']

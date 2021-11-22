@@ -11,7 +11,7 @@
             </li>
             <li>
                 <span>Броня:</span>
-                <span>{{ gameData.heroArmor }}</span>
+                <span>{{ HERO_ARMOR_STATE }}</span>
             </li>
             <li>
                 <span>Крит:</span>
@@ -29,11 +29,11 @@
         <ul class="hero-equip">
             <li>
                 <span>Оружие:</span>
-                <span>{{ gameData.heroWeapon }}</span>
+                <span>{{ HERO_WEAPON_STATE }}</span>
             </li>
             <li>
                 <span>Доспех:</span>
-                <span>{{ gameData.heroEquip }}</span>
+                <span>{{ HERO_EQUIP_STATE }}</span>
             </li>
         </ul>
     </div>
@@ -48,7 +48,7 @@ export default {
     name: 'HeroInfoBar',
     data() {
         return {
-            gameData: {}
+            gameData: {},
         }
     },
     components: {
@@ -58,9 +58,17 @@ export default {
         if (localStorage.getItem('gameData') != null) {
             var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
             this.gameData = gameDataResponse.hero;
+            var currentDamage = this.gameData.heroDamage + this.gameData.weaponDamage;
+            var currentArmor = this.gameData.heroArmor;
+            var currentWeapon = this.gameData.heroWeapon;
+            var currentEquip = this.gameData.heroEquip;
+
             this.HERO_HP_UPDATE_ACT(this.gameData.heroHP);
             this.HERO_GOLD_UPDATE_ACT(this.gameData.heroGold);
-            this.HERO_DAMAGE_UPDATE_ACT(this.gameData.heroDamage);
+            this.HERO_DAMAGE_UPDATE_ACT(currentDamage);
+            this.HERO_ARMOR_ACT(currentArmor);
+            this.HERO_EQUIP_ACT(currentEquip);
+            this.HERO_WEAPON_ACT(currentWeapon);
         }
     },
     computed: {
@@ -68,7 +76,9 @@ export default {
             'HERO_HP_STATE',
             'HERO_GOLD_STATE',
             'HERO_DAMAGE_STATE',
-            // 'INVENTORY_TOGGLE_STATE'
+            'HERO_WEAPON_STATE',
+            'HERO_EQUIP_STATE',
+            'HERO_ARMOR_STATE'
         ]),
     },
     methods: {
@@ -78,7 +88,10 @@ export default {
             'HERO_HP_UPDATE_ACT',
             'HERO_GOLD_UPDATE_ACT',
             'HERO_DAMAGE_UPDATE_ACT',
-            'INVENTORY_TOGGLE_ACT'
+            'INVENTORY_TOGGLE_ACT',
+            'HERO_EQUIP_ACT',
+            'HERO_ARMOR_ACT',
+            'HERO_WEAPON_ACT'
         ]),
         questListToggle() {
             this.QUEST_LIST_TOGGLE_ACT();
@@ -86,7 +99,6 @@ export default {
         },
         inventoryToggle() {
             this.INVENTORY_TOGGLE_ACT();
-            // console.log(this.INVENTORY_TOGGLE_STATE)
         }
     }
 }
