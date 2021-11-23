@@ -41,7 +41,7 @@ export default {
         return {
             heroImg,
             heroBg,
-            hero: [],
+            hero: {},
             equipImage: {
                 destroyer,
                 leatherarmor,
@@ -55,14 +55,19 @@ export default {
         if (localStorage.getItem('gameData') != null) {
             var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
             this.hero = gameDataResponse.hero;
+            console.log(this.hero)
             var weapon = this.hero.heroWeapon,
                 equip = this.hero.heroEquip,
                 indexItem = this.findWithKey(this.hero.inventory, 'nameItem', weapon),
-                indexItemEquip = this.findWithKey(this.hero.inventory, 'nameItem', equip),
-                classItemEquip = this.hero.inventory[indexItemEquip].classItem,
-                classItem = this.hero.inventory[indexItem].classItem;
-            this.WEAPON_CLASS_ACT(classItem);
-            this.EQUIP_CLASS_ACT(classItemEquip)
+                indexItemEquip = this.findWithKey(this.hero.inventory, 'nameItem', equip);
+            if (indexItem != -1) {
+                var classItem = this.hero.inventory[indexItem].classItem;
+                this.WEAPON_CLASS_ACT(classItem);
+            }
+            if (indexItemEquip != -1) {
+                var classItemEquip = this.hero.inventory[indexItemEquip].classItem;
+                this.EQUIP_CLASS_ACT(classItemEquip)
+            }
         }
     },
     computed: {

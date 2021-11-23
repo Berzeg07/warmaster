@@ -10,7 +10,11 @@
                     v-if="HEROHOUSE_SHOW_STATE"
                 >Дом</Tooltip>
                 <Tooltip class="garold">Гарольд</Tooltip>
-                <Tooltip class="shop">Лавка</Tooltip>
+                <Tooltip
+                    @click.native="showScene('horinisGuard', $event)"
+                    class="shop"
+                    sceneType="shop"
+                >Лавка</Tooltip>
                 <Tooltip class="bernard" v-if="BERNARD_SHOW_STATE">Бернард</Tooltip>
             </div>
             <Tooltip
@@ -63,10 +67,11 @@ export default {
             'MODAL_SHOW_ACT',
             'HORINIS_SHOW_ACT',
             'HEROHOUSE_SHOW_ACT',
-            'ANDREAS_TRAIN_UPDATE_ACT'
+            'ANDREAS_TRAIN_UPDATE_ACT',
+            'SHOP_SHOW_ACT'
         ]),
         showScene(scene, event) {
-            var gameDataResponse = this.sceneRender(scene);
+            var gameDataResponse = this.sceneRender(scene, event);
             var target = event.target.getAttribute('data-type');
             if (gameDataResponse) {
                 if (target == 'cityguard') {

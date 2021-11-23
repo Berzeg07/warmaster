@@ -18,6 +18,7 @@
             <HeroInfoBar />
         </div>
         <DialogueScene v-if="MODAL_SHOW_STATE" :class="checkModalState" />
+        <ShopScene v-if="SHOP_SHOW_STATE" :class="checkShopState" />
     </div>
 </template>
 
@@ -36,6 +37,8 @@ import FridrickFarm from '@/components/MapPlaces/FridrickFarm.vue';
 // Всплывающие сцены *
 import Introduction from '@/components/Scenes/Introduction.vue';
 import DialogueScene from '@/components/Scenes/DialogueScene.vue';
+import ShopScene from '@/components/Scenes/ShopScene.vue';
+
 
 // Затемнение фона *
 import Overlay from '@/components/Overlay/Overlay.vue';
@@ -72,7 +75,8 @@ export default {
         Introduction,
         DialogueScene,
         QuestList,
-        Inventory
+        Inventory,
+        ShopScene
     },
     data() {
         return {
@@ -85,7 +89,7 @@ export default {
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        // localStorage.clear();
+        localStorage.clear();
 
         // Запись в locale storage первичной структуры базы данных *
         if (localStorage.getItem('gameData') == null) {
@@ -104,6 +108,12 @@ export default {
                     this.MODAL_SHOW_ACT();
                 }
             }
+            if (gameDataResponse.shopShow == true) {
+                if (this.SHOP_SHOW_STATE == false) {
+                    this.OVERLAY_SHOW_ACT();
+                    this.SHOP_SHOW_ACT();
+                }
+            }
         }
         // Проверка на доступность локации Фридрика *
         if (gameDataResponse.gameProgress.isShowFarm) {
@@ -113,11 +123,15 @@ export default {
     computed: {
         ...mapGetters([
             'MODAL_SHOW_STATE',
+            'SHOP_SHOW_STATE',
             'OVERLAY_STATE',
             'QUEST_LIST_STATE',
             'FRIDRICKFARM_SHOW_STATE',
             'INVENTORY_TOGGLE_STATE'
         ]),
+        checkShopState() {
+            return this.SHOP_SHOW_STATE == true ? this.modalShow : '';
+        },
 
         checkModalState() {
             return this.MODAL_SHOW_STATE == true ? this.modalShow : '';
@@ -135,6 +149,7 @@ export default {
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
             'FRIDRICKFARM_SHOW_ACT',
+            'SHOP_SHOW_ACT'
         ]),
         hideIntro(data) {
             this.isShowIntro = data.intro;

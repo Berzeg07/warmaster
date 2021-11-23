@@ -15,14 +15,21 @@ export const findWithKey = {
 // Вывод сцены *
 export const sceneRender = {
     methods: {
-        sceneRender(gameSceneNew) {
+        sceneRender(gameSceneNew, event) {
             if (localStorage.getItem('gameData') != null) {
+                var checkAttr = event.currentTarget.getAttribute('sceneType');
                 var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
-                gameDataResponse.gameSceneCurrent = gameSceneNew;
+                console.log(checkAttr);
+                if (checkAttr == null) {
+                    gameDataResponse.gameSceneCurrent = gameSceneNew;
+                    this.MODAL_SHOW_ACT();
+                } else if (checkAttr == 'shop') {
+                    gameDataResponse.shopShow = true;
+                    this.SHOP_SHOW_ACT();
+                }
+                this.OVERLAY_SHOW_ACT();
                 var serialDataBase = JSON.stringify(gameDataResponse);
                 localStorage.setItem("gameData", serialDataBase);
-                this.OVERLAY_SHOW_ACT();
-                this.MODAL_SHOW_ACT();
                 return gameDataResponse;
             } else {
                 console.log('Ошибка в базе данных');

@@ -1,6 +1,7 @@
 export var dataBase = {
     gameSceneCurrent: 'intro',
     gameFightScene: false,
+    shopShow: false,
     gameProgress: {
         isShowHorinis: true,
         isShowFarm: false,
@@ -28,6 +29,62 @@ export var dataBase = {
             }
         }
     },
+    shop: [
+        {
+            nameItem: 'Кожаная броня',
+            typeItem: 'Броня',
+            priceItem: '200',
+            propertiesItem: 5,
+            classItem: 'leather-armor'
+        },
+
+        {
+            nameItem: 'Пластинчатый доспех',
+            typeItem: 'Броня',
+            priceItem: '600',
+            propertiesItem: 10,
+            classItem: 'heavy-armor'
+        },
+
+
+        {
+            nameItem: 'Дубинка',
+            typeItem: 'Урон',
+            priceItem: '130',
+            propertiesItem: 5,
+            classItem: 'club'
+        },
+
+        {
+            nameItem: 'Полуторный меч',
+            typeItem: 'Урон',
+            priceItem: '250',
+            propertiesItem: 10,
+            classItem: 'sword'
+        },
+
+        {
+            nameItem: 'Сокрушитель',
+            typeItem: 'Урон',
+            priceItem: '500',
+            propertiesItem: 15,
+            classItem: 'axe'
+        },
+        {
+            nameItem: 'Меч Беллиара',
+            typeItem: 'Урон',
+            priceItem: '1000',
+            propertiesItem: 30,
+            classItem: 'destroyer'
+        },
+        {
+            nameItem: 'Панцирь Дракона',
+            typeItem: 'Броня',
+            priceItem: '1000',
+            propertiesItem: 15,
+            classItem: 'dragon-armor'
+        }
+    ],
     hero: {
         heroName: 'Герой',
         heroDamage: 10,
@@ -40,66 +97,59 @@ export var dataBase = {
         heroWeapon: 'Пусто',
         heroEquip: 'Пусто',
         inventory: [
-            {
-                nameItem: 'Меч Беллиара',
-                typeItem: 'Урон',
-                priceItem: '1000',
-                propertiesItem: 30,
-                classItem: 'destroyer',
-                countItem: 2
-            },
-            {
-                nameItem: 'Сокрушитель',
-                typeItem: 'Урон',
-                priceItem: '1000',
-                propertiesItem: 25,
-                classItem: 'axe',
-                countItem: 2
-            },
-            {
-                nameItem: 'Кожаная броня',
-                typeItem: 'Броня',
-                priceItem: '1000',
-                propertiesItem: 5,
-                classItem: 'leatherarmor',
-                countItem: 2
-            },
-            {
-                nameItem: 'Панцирь Дракона',
-                typeItem: 'Броня',
-                priceItem: '1000',
-                propertiesItem: 15,
-                classItem: 'dragonarmor',
-                countItem: 2
-            },
-            {
-                nameItem: 'Шкура варга',
-                typeItem: 'Предмет',
-                priceItem: 150,
-                propertiesItem: 'Для продажи',
-                countItem: 2
-            },
-            {
-                nameItem: 'Рог мракориса',
-                typeItem: 'Предмет',
-                priceItem: 150,
-                propertiesItem: 'Для продажи',
-                countItem: 10
-            },
-            {
-                nameItem: 'Слиток стали',
-                typeItem: 'Предмет',
-                priceItem: '110',
-                propertiesItem: 'Ковка',
-                countItem: 10
-            },
-            {
-                nameItem: 'Хвост крысы',
-                typeItem: 'Предмет',
-                priceItem: 150,
-                propertiesItem: 'Для продажи',
-                countItem: 3
-            }
+            // {
+            //     nameItem: 'Меч Беллиара',
+            //     typeItem: 'Урон',
+            //     priceItem: '1000',
+            //     propertiesItem: 30,
+            //     classItem: 'destroyer',
+            //     countItem: 2
+            // },
+            // {
+            //     nameItem: 'Сокрушитель',
+            //     typeItem: 'Урон',
+            //     priceItem: '1000',
+            //     propertiesItem: 25,
+            //     classItem: 'axe',
+            //     countItem: 2
+            // },
+            // {
+            //     nameItem: 'Кожаная броня',
+            //     typeItem: 'Броня',
+            //     priceItem: '1000',
+            //     propertiesItem: 5,
+            //     classItem: 'leatherarmor',
+            //     countItem: 2
+            // },
+            // {
+            //     nameItem: 'Панцирь Дракона',
+            //     typeItem: 'Броня',
+            //     priceItem: '1000',
+            //     propertiesItem: 15,
+            //     classItem: 'dragonarmor',
+            //     countItem: 2
+            // },
+            // {
+            //     nameItem: 'Шкура варга',
+            //     typeItem: 'Предмет',
+            //     priceItem: 150,
+            //     propertiesItem: 'Для продажи',
+            //     countItem: 2
+            // },
+            // {
+            //     nameItem: 'Рог мракориса',
+            //     typeItem: 'Предмет',
+            //     priceItem: 150,
+            //     propertiesItem: 'Для продажи',
+            //     countItem: 10
+            // },
+            // {
+            //     nameItem: 'Хвост крысы',
+            //     typeItem: 'Предмет',
+            //     priceItem: 150,
+            //     propertiesItem: 'Для продажи',
+            //     countItem: 3
+            // }
         ],
         questList: [{
             questTitle: 'Начало',

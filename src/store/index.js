@@ -10,6 +10,8 @@ export default new Vuex.Store({
     overlay: false,
     // Вывод сцены *
     modalShow: false,
+    // Вывод магазина *
+    shopShow: false,
     // Журнал квестов *
     questListShow: false,
     // Инвентарь *
@@ -79,6 +81,9 @@ export default new Vuex.Store({
     MODAL_SHOW_TOGGLE(state) {
       state.modalShow = !state.modalShow;
     },
+    SHOP_SHOW_TOGGLE(state) {
+      state.shopShow = !state.shopShow;
+    },
     HORINIS_SHOW(state) {
       state.isShowPlace.horinis = true;
     },
@@ -138,6 +143,9 @@ export default new Vuex.Store({
     MODAL_SHOW_ACT({ commit }) {
       commit('MODAL_SHOW_TOGGLE');
     },
+    SHOP_SHOW_ACT({ commit }) {
+      commit('SHOP_SHOW_TOGGLE');
+    },
     HORINIS_SHOW_ACT({ commit }) {
       commit('HORINIS_SHOW');
     },
@@ -193,6 +201,9 @@ export default new Vuex.Store({
     },
     MODAL_SHOW_STATE(state) {
       return state.modalShow;
+    },
+    SHOP_SHOW_STATE(state) {
+      return state.shopShow;
     },
     HORINIS_SHOW_STATE(state) {
       return state.isShowPlace.horinis;

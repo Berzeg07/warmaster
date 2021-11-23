@@ -52,7 +52,6 @@ import selina from "@/assets/img/tavern-loc.jpg";
 import heroHouse from "@/assets/img/house-loc.jpg";
 import andreas from "@/assets/img/andreas-loc.jpg";
 
-
 // Миксины *
 import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
 
