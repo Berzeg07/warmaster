@@ -19,12 +19,13 @@
                     <i>{{ item.countItem }}</i> шт.
                 </label>
             </li>
+            <li v-if="isEmptyItems()">Пусто</li>
         </ul>
         <div class="btn-block btn-block_inv">
             <div class="tooltip-inner" v-if="isEquip">
                 <p>{{ isEquip }}</p>
             </div>
-            <Button @click.native="equipItem(checkedItem)">Экипировать</Button>
+            <Button @click.native="equipItem(checkedItem)" v-if="!isEmptyItems()">Экипировать</Button>
         </div>
     </div>
 </template>
@@ -70,6 +71,9 @@ export default {
             'WEAPON_CLASS_ACT',
             'EQUIP_CLASS_ACT'
         ]),
+        isEmptyItems() {
+            return this.inventory.length == 0 ? true : false;
+        },
         equipItem(itemName) {
             if (itemName) {
                 var indexItem = this.findWithKey(this.inventory, 'nameItem', itemName),

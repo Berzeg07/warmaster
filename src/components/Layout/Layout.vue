@@ -89,7 +89,7 @@ export default {
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        localStorage.clear();
+        // localStorage.clear();
 
         // Запись в locale storage первичной структуры базы данных *
         if (localStorage.getItem('gameData') == null) {
@@ -108,11 +108,11 @@ export default {
                     this.MODAL_SHOW_ACT();
                 }
             }
-            if (gameDataResponse.shopShow == true) {
-                if (this.SHOP_SHOW_STATE == false) {
-                    this.OVERLAY_SHOW_ACT();
-                    this.SHOP_SHOW_ACT();
-                }
+        }
+        if (gameDataResponse.shopShow) {
+            if (this.SHOP_SHOW_STATE == false) {
+                this.OVERLAY_SHOW_ACT();
+                this.SHOP_SHOW_ACT();
             }
         }
         // Проверка на доступность локации Фридрика *

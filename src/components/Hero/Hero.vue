@@ -27,8 +27,6 @@ import leatherarmor from "@/assets/img/light-armor.png";
 import axe from "@/assets/img/battle-axe.png";
 import dragonarmor from "@/assets/img/dragon-armor.png";
 
-
-
 // Vuex *
 import { mapGetters, mapActions } from 'vuex'
 // Миксины *

@@ -35,7 +35,7 @@ export var dataBase = {
             typeItem: 'Броня',
             priceItem: '200',
             propertiesItem: 5,
-            classItem: 'leather-armor'
+            classItem: 'leatherarmor'
         },
 
         {
@@ -82,7 +82,7 @@ export var dataBase = {
             typeItem: 'Броня',
             priceItem: '1000',
             propertiesItem: 15,
-            classItem: 'dragon-armor'
+            classItem: 'dragonarmor'
         }
     ],
     hero: {

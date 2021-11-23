@@ -175,6 +175,7 @@ export default {
                             this.gameData.hero.heroArmor = 0;
                         }
                     }
+                    localStorage.setItem("gameData", JSON.stringify(this.gameData));
                 }
             }
         },
@@ -204,8 +205,9 @@ export default {
                         clone.priceItem = newPrice;
                         clone.countItem = 1;
                         this.heroItems.push(clone);
-                        this.gameData.hero.heroItems = this.heroItems;
+                        this.gameData.hero.inventory = this.heroItems;
                     }
+                    localStorage.setItem("gameData", JSON.stringify(this.gameData));
                 }
             }
         }
