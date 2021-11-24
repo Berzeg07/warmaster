@@ -9,12 +9,8 @@
                     class="house"
                     v-if="HEROHOUSE_SHOW_STATE"
                 >Дом</Tooltip>
-                <Tooltip class="garold">Гарольд</Tooltip>
-                <Tooltip
-                    @click.native="showScene('horinisGuard', $event)"
-                    class="shop"
-                    sceneType="shop"
-                >Лавка</Tooltip>
+                <!-- <Tooltip class="garold">Гарольд</Tooltip> -->
+                <Tooltip @click.native="showScene(null, $event)" class="shop" sceneType="shop">Лавка</Tooltip>
                 <Tooltip class="bernard" v-if="BERNARD_SHOW_STATE">Бернард</Tooltip>
             </div>
             <Tooltip

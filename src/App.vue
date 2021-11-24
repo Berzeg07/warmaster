@@ -80,6 +80,23 @@ textarea {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.modal-loc {
+  width: 900px;
+  height: 600px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid white;
+  -webkit-box-shadow: 0 0 5px 0 white;
+  -moz-box-shadow: 0 0 5px 0 white;
+  box-shadow: 0 0 5px 0 white;
+  border-radius: 10px;
+  z-index: 20;
+  display: none;
+  overflow: hidden;
+  background-size: cover;
+}
 .modal.modalshow {
   display: block;
   animation: fade 0.5s forwards ease-in-out;

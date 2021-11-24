@@ -26,6 +26,9 @@ export const sceneRender = {
                 } else if (checkAttr == 'shop') {
                     gameDataResponse.shopShow = true;
                     this.SHOP_SHOW_ACT();
+                } else if (checkAttr == 'battle') {
+                    gameDataResponse.gameFightScene = true;
+                    this.BATTLE_ACT();
                 }
                 this.OVERLAY_SHOW_ACT();
                 var serialDataBase = JSON.stringify(gameDataResponse);

@@ -257,7 +257,7 @@ export default {
     position: relative;
     z-index: 25;
 }
-.modal-loc {
+/* .modal-loc {
     width: 900px;
     height: 600px;
     position: fixed;
@@ -272,7 +272,7 @@ export default {
     z-index: 20;
     display: none;
     overflow: hidden;
-}
+} */
 
 .btn-block {
     border-top: 1px solid white;

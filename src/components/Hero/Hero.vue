@@ -1,27 +1,24 @@
 <template>
-    <div class="hero">
-        <div class="hero-item" :style="{ backgroundImage: `url(${heroBg})` }">
-            <span class="hero-name">Герой</span>
-            <div class="hero-img">
-                <img :src="heroImg" alt="герой" />
-            </div>
-            <div
-                class="hero-armor"
-                :class="EQUIP_CLASS_STATE"
-                :style="{ backgroundImage: `url(${armorImage})` }"
-            ></div>
-            <div
-                class="hero-weapon"
-                :class="WEAPON_CLASS_STATE"
-                :style="{ backgroundImage: `url(${weaponImage})` }"
-            ></div>
+    <div class="hero-item">
+        <div class="hero-img">
+            <img :src="heroImg" alt="герой" />
         </div>
+        <div
+            class="hero-armor"
+            :class="EQUIP_CLASS_STATE"
+            :style="{ backgroundImage: `url(${armorImage})` }"
+        ></div>
+        <div
+            class="hero-weapon"
+            :class="WEAPON_CLASS_STATE"
+            :style="{ backgroundImage: `url(${weaponImage})` }"
+        ></div>
     </div>
 </template>
 
 <script>
 import heroImg from "@/assets/img/hero.png";
-import heroBg from "@/assets/img/hero-bg.jpg";
+// import heroBg from "@/assets/img/hero-bg.jpg";
 import destroyer from "@/assets/img/destroyer.png";
 import leatherarmor from "@/assets/img/light-armor.png";
 import axe from "@/assets/img/battle-axe.png";
@@ -38,7 +35,7 @@ export default {
     data() {
         return {
             heroImg,
-            heroBg,
+            // heroBg,
             hero: {},
             equipImage: {
                 destroyer,
@@ -90,6 +87,11 @@ export default {
 </script>
 
 <style scope>
+.hero-item {
+    width: 240px;
+    position: relative;
+    padding: 80px 15px 25px;
+}
 .hero-armor,
 .hero-weapon {
     position: absolute;
@@ -135,29 +137,6 @@ export default {
     left: 3px;
     z-index: 0;
 }
-.hero-item {
-    width: 240px;
-    border: 1px solid white;
-    -webkit-box-shadow: 0 0 5px 0 white;
-    -moz-box-shadow: 0 0 5px 0 white;
-    box-shadow: 0 0 5px 0 white;
-    background-size: cover;
-    padding: 25px 15px;
-    text-align: center;
-    border-radius: 10px;
-    position: relative;
-}
-
-.hero-name {
-    background: rgba(0, 0, 0, 0.8);
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 20px;
-    display: inline-block;
-    margin: 0 10px 25px;
-    color: orange;
-}
-
 .hero-img {
     width: 150px;
     margin: 0 auto;

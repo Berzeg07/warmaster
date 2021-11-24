@@ -1,6 +1,7 @@
 export var dataBase = {
     gameSceneCurrent: 'intro',
     gameFightScene: false,
+    currentEnemy: false,
     shopShow: false,
     gameProgress: {
         isShowHorinis: true,
@@ -85,6 +86,65 @@ export var dataBase = {
             classItem: 'dragonarmor'
         }
     ],
+    enemy: {
+        // Болотная крыса *
+        rat: {
+            name: 'Крыса',
+            damage: 12,
+            armor: 0,
+            crit: 10,
+            hitPoint: 100,
+            item: {
+                nameItem: 'Хвост крысы',
+                typeItem: 'Предмет',
+                priceItem: 80,
+                propertiesItem: 'Для продажи',
+                countItem: 1
+            },
+            image: '<div class="modal-enemy rat-battle" key="rat"><img src="img/rat.png" alt="Болотная крыса"></div>'
+        },
+        // Варг *
+        varg: {
+            name: 'Варг',
+            damage: 30,
+            armor: 0,
+            crit: 10,
+            hitPoint: 100,
+            item: {
+                nameItem: 'Шкура варга',
+                typeItem: 'Предмет',
+                priceItem: 100,
+                propertiesItem: 'Для продажи',
+                countItem: 1
+            },
+            image: '<div class="modal-enemy varg-battle" key="varg"><img src="img/varg.png" alt="Варг"></div>'
+        },
+        // Василиск *
+        vasilisk: {
+            name: 'Василиск',
+            damage: 40,
+            armor: 0,
+            crit: 10,
+            hitPoint: 100,
+            item: {
+                nameItem: 'Рог мракориса',
+                typeItem: 'Предмет',
+                priceItem: 150,
+                propertiesItem: 'Для продажи',
+                countItem: 1
+            },
+            image: '<div class="modal-enemy vasilisk-battle" key="vasilisk"><img src="img/vasilisk.png" alt="Василиск"></div>'
+        },
+        // Орк *
+        ork: {
+            name: 'Орк',
+            damage: 45,
+            armor: 5,
+            crit: 20,
+            hitPoint: 100,
+            image: '<div class="modal-enemy orc-battle" key="ork"><img src="img/orc.png" alt="Орк"></div>'
+        }
+    },
     hero: {
         heroName: 'Герой',
         heroDamage: 10,
@@ -92,7 +152,7 @@ export var dataBase = {
         heroArmor: 0,
         // equipArmor: 0,
         heroCrit: 20,
-        heroHP: 10,
+        heroHP: 100,
         heroGold: 1000,
         heroWeapon: 'Пусто',
         heroEquip: 'Пусто',

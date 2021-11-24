@@ -14,11 +14,13 @@
                 <Introduction v-if="isShowIntro" @hideIntro="hideIntro" />
             </div>
             <Overlay />
-            <Hero />
+            <!-- <Hero /> -->
+            <HeroBack />
             <HeroInfoBar />
         </div>
         <DialogueScene v-if="MODAL_SHOW_STATE" :class="checkModalState" />
         <ShopScene v-if="SHOP_SHOW_STATE" :class="checkShopState" />
+        <BattleScene v-if="BATTLE_STATE" :class="checkBattleState" />
     </div>
 </template>
 
@@ -38,13 +40,14 @@ import FridrickFarm from '@/components/MapPlaces/FridrickFarm.vue';
 import Introduction from '@/components/Scenes/Introduction.vue';
 import DialogueScene from '@/components/Scenes/DialogueScene.vue';
 import ShopScene from '@/components/Scenes/ShopScene.vue';
-
+import BattleScene from '@/components/Scenes/BattleScene.vue';
 
 // Затемнение фона *
 import Overlay from '@/components/Overlay/Overlay.vue';
 
 // Герой *
-import Hero from '@/components/Hero/Hero.vue';
+// import Hero from '@/components/Hero/Hero.vue';
+import HeroBack from '@/components/Hero/HeroBack.vue';
 import HeroInfoBar from '@/components/Hero/HeroInfoBar.vue';
 
 // Журнал квестов *
@@ -64,7 +67,8 @@ export default {
     name: 'layout',
     components: {
         NorthForest,
-        Hero,
+        HeroBack,
+        // Hero,
         HeroInfoBar,
         MageHouse,
         Horinis,
@@ -76,7 +80,8 @@ export default {
         DialogueScene,
         QuestList,
         Inventory,
-        ShopScene
+        ShopScene,
+        BattleScene
     },
     data() {
         return {
@@ -89,7 +94,7 @@ export default {
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        // localStorage.clear();
+        localStorage.clear();
 
         // Запись в locale storage первичной структуры базы данных *
         if (localStorage.getItem('gameData') == null) {
@@ -115,6 +120,12 @@ export default {
                 this.SHOP_SHOW_ACT();
             }
         }
+        if (gameDataResponse.gameFightScene) {
+            if (this.BATTLE_STATE == false) {
+                this.OVERLAY_SHOW_ACT();
+                this.BATTLE_ACT();
+            }
+        }
         // Проверка на доступность локации Фридрика *
         if (gameDataResponse.gameProgress.isShowFarm) {
             this.FRIDRICKFARM_SHOW_ACT();
@@ -127,7 +138,8 @@ export default {
             'OVERLAY_STATE',
             'QUEST_LIST_STATE',
             'FRIDRICKFARM_SHOW_STATE',
-            'INVENTORY_TOGGLE_STATE'
+            'INVENTORY_TOGGLE_STATE',
+            'BATTLE_STATE'
         ]),
         checkShopState() {
             return this.SHOP_SHOW_STATE == true ? this.modalShow : '';
@@ -141,7 +153,10 @@ export default {
         },
         checkInvModalState() {
             return this.INVENTORY_TOGGLE_STATE == true ? this.modalShow : '';
-        }
+        },
+        checkBattleState() {
+            return this.BATTLE_STATE == true ? this.modalShow : '';
+        },
     },
     methods: {
         ...mapActions([
@@ -149,7 +164,8 @@ export default {
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
             'FRIDRICKFARM_SHOW_ACT',
-            'SHOP_SHOW_ACT'
+            'SHOP_SHOW_ACT',
+            'BATTLE_ACT'
         ]),
         hideIntro(data) {
             this.isShowIntro = data.intro;

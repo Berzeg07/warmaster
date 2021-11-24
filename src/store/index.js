@@ -16,6 +16,10 @@ export default new Vuex.Store({
     questListShow: false,
     // Инвентарь *
     inventoryShow: false,
+    // Битва *
+    battle: false,
+    // Враг в текущей битве *
+    currentEnemy: false,
     // Доступность локаций на карте *
     isShowPlace: {
       horinis: false,
@@ -39,6 +43,9 @@ export default new Vuex.Store({
     intro: true
   },
   mutations: {
+    ENEMY_UPDATE(state, enemy) {
+      state.currentEnemy = enemy;
+    },
     HERO_DAMAGE_UPDATE(state, currentDamage) {
       state.hero.heroDamage = currentDamage;
     },
@@ -84,6 +91,9 @@ export default new Vuex.Store({
     SHOP_SHOW_TOGGLE(state) {
       state.shopShow = !state.shopShow;
     },
+    BATTLE_TOGGLE(state) {
+      state.battle = !state.battle;
+    },
     HORINIS_SHOW(state) {
       state.isShowPlace.horinis = true;
     },
@@ -101,6 +111,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    ENEMY_UPDATE_ACT(context, enemy) {
+      context.commit('ENEMY_UPDATE', enemy);
+    },
     WEAPON_CLASS_ACT(context, className) {
       context.commit('WEAPON_CLASS_UPDATE', className);
     },
@@ -115,6 +128,9 @@ export default new Vuex.Store({
     },
     HERO_EQUIP_ACT(context, currentEquip) {
       context.commit('HERO_EQUIP_UPDATE', currentEquip);
+    },
+    BATTLE_ACT(context) {
+      context.commit('BATTLE_TOGGLE');
     },
     ANDREAS_TRAIN_UPDATE_ACT(context) {
       context.commit('ANDREAS_TRAIN_UPDATE');
@@ -163,6 +179,12 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    ENEMY_STATE(state) {
+      return state.currentEnemy;
+    },
+    BATTLE_STATE(state) {
+      return state.battle;
+    },
     WEAPON_CLASS_STATE(state) {
       return state.hero.weaponClass;
     },
