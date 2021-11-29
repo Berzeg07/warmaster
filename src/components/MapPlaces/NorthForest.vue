@@ -51,6 +51,8 @@ export default {
             var gameDataResponse = this.sceneRender(scene, event);
             var target = event.target.getAttribute('data-type');
             if (gameDataResponse) {
+                gameDataResponse.currentEnemy = target;
+                localStorage.setItem("gameData", JSON.stringify(gameDataResponse));
                 this.ENEMY_UPDATE_ACT(target);
                 // console.log(this.ENEMY_STATE)
             }

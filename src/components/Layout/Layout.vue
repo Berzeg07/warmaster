@@ -94,7 +94,7 @@ export default {
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        localStorage.clear();
+        // localStorage.clear();
 
         // Запись в locale storage первичной структуры базы данных *
         if (localStorage.getItem('gameData') == null) {
@@ -107,8 +107,8 @@ export default {
         if (gameDataResponse.gameSceneCurrent != 'intro') {
             this.isShowIntro = false;
             this.OVERLAY_HIDE_ACT();
-            if (gameDataResponse.gameSceneCurrent != null) {
-                if (this.MODAL_SHOW_STATE != true) {
+            if (gameDataResponse.gameSceneCurrent) {
+                if (!this.MODAL_SHOW_STATE) {
                     this.OVERLAY_SHOW_ACT();
                     this.MODAL_SHOW_ACT();
                 }

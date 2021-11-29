@@ -6,6 +6,17 @@
         <div class="modal-inner">
             <div class="battle-block">
                 <div class="modal-inner_item">
+                    <div
+                        class="overlay-battle overlay-battle_show"
+                        v-if="battleResult.isShowResult"
+                    >
+                        <div class="battle-result">
+                            <p>{{ battleResult.resultText }}</p>
+                            <div class="btn-block">
+                                <Button @click.native="closeScene">Уйти</Button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal-hero">
                         <div class="modal-hero_inner">
                             <Hero />
@@ -16,8 +27,8 @@
                     </div>
                     <div class="battle-options">
                         <div class="battle-options_inner battle-options_action">
-                            <Button>Атаковать</Button>
-                            <Button>Отступить</Button>
+                            <Button @click.native="battle">Атаковать</Button>
+                            <Button @click.native="closeScene">Отступить</Button>
                         </div>
                         <div class="battle-options_flex">
                             <div class="battle-options_inner">
@@ -39,7 +50,7 @@
                                     </li>
                                     <li>
                                         <b>Здоровье:</b>
-                                        <span>{{ heroData.heroHP }}</span>
+                                        <span>{{ heroHP }}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -86,12 +97,14 @@ import rat from "@/assets/img/rat.png";
 import varg from "@/assets/img/varg.png";
 import vasilisk from "@/assets/img/vasilisk.png";
 
-
 // Vuex *
 import { mapActions, mapGetters, } from 'vuex';
+// Миксины *
+import { findWithKey } from '@/mixins/mixins';
 
 export default {
     name: 'BattleScene',
+    mixins: [findWithKey],
     components: {
         Button,
         Hero
@@ -102,9 +115,12 @@ export default {
             this.gameData = gameDataResponse;
             this.heroData = gameDataResponse.hero;
             this.heroDamage = this.heroData.heroDamage + this.heroData.weaponDamage;
+            this.heroHP = this.heroData.heroHP;
             this.enemy = this.gameData.enemy;
-            this.currentEnemy = this.enemy[this.ENEMY_STATE];
-            console.log('enemy', this.currentEnemy.damage)
+            this.currentEnemy = this.enemy[this.gameData.currentEnemy];
+            if (this.ENEMY_STATE == false) {
+                this.ENEMY_UPDATE_ACT(this.gameData.currentEnemy);
+            }
         }
     },
     data() {
@@ -121,10 +137,16 @@ export default {
             },
             gameData: {},
             heroData: {},
+            enemy: {},
             currentEnemy: {},
             heroDamage: '',
-            enemy: {},
+            heroHP: '',
             background: sceneImage,
+            battleResult: {
+                isHeroWinner: false,
+                isShowResult: false,
+                resultText: ''
+            }
         }
     },
     computed: {
@@ -136,13 +158,125 @@ export default {
         ...mapActions([
             'OVERLAY_SHOW_ACT',
             'BATTLE_ACT',
+            'OVERLAY_HIDE_ACT',
             'ENEMY_UPDATE_ACT'
         ]),
+        critChance() {
+            var rand = 1 - 0.5 + Math.random() * (100 - 1 + 1)
+            rand = Math.round(rand);
+            return rand;
+        },
+        closeScene() {
+            this.gameData.gameFightScene = false;
+            this.currentEnemy.hitPoint = 100;
+            this.gameData.hero.heroHP = this.heroHP;
+            var serialDataBase = JSON.stringify(this.gameData);
+            localStorage.setItem("gameData", serialDataBase);
+            this.OVERLAY_HIDE_ACT();
+            this.BATTLE_ACT();
+        },
+        battle() {
+            var heroDamage = this.heroDamage,
+                enemyDamage = this.currentEnemy.damage,
+                heroCritChance = this.critChance(),
+                enemyCritChance = this.critChance();
+
+            if (heroCritChance <= this.heroData.heroCrit) {
+                heroDamage *= 2;
+            }
+            if (enemyCritChance <= this.currentEnemy.crit) {
+                enemyDamage *= 2;
+            }
+
+            // Вычитываем урон врагу *
+            this.currentEnemy.hitPoint -= heroDamage;
+            // Вычитываем урон герою *
+            this.heroHP -= enemyDamage;
+
+            if (this.heroHP <= 1) {
+                this.heroHP = 1;
+                this.battleResult.resultText = 'Поражение! Ты тяжело ранен и чудом сумел скрыться';
+                this.battleResult.isShowResult = true;
+            }
+
+            if (this.currentEnemy.hitPoint <= 0) {
+                this.currentEnemy.hitPoint = 1;
+                this.battleResult.isHeroWinner = true;
+                this.battleResult.resultText = 'Победа!';
+                this.battleResult.isShowResult = true;
+
+                var lootEnemy = this.currentEnemy.item;
+                if (lootEnemy != undefined) {
+                    var lootName = lootEnemy.nameItem;
+                    var checkHeroLoot = this.findWithKey(this.heroData.inventory, 'nameItem', lootName);
+                    if (checkHeroLoot != -1) {
+                        this.heroData.inventory[checkHeroLoot].countItem += 1;
+                    } else {
+                        var clone = {};
+                        for (var key in lootEnemy) {
+                            clone[key] = lootEnemy[key];
+                        }
+                        this.heroData.inventory.push(clone);
+                        this.gameData.hero.inventory = this.heroData.inventory;
+                        console.log(this.heroData.inventory);
+                    }
+                    this.battleResult.resultText = `Победа! Добыча: ${lootName}`;
+                }
+            }
+            console.log(this.currentEnemy.hitPoint);
+        }
     }
 }
 </script>
 
 <style scoped>
+.overlay-battle {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    display: none;
+}
+
+.overlay-battle_show {
+    display: -webkit-flex;
+    display: -ms-flex;
+    display: flex;
+    animation: fade 0.5s forwards ease-in-out;
+}
+.battle-result {
+    font-size: 18px;
+    padding: 5px 12px;
+    border: 1px solid white;
+    -webkit-box-shadow: 0 0 5px 0 white;
+    -moz-box-shadow: 0 0 5px 0 white;
+    box-shadow: 0 0 5px 0 white;
+    border-radius: 10px;
+    background: rgba(238, 210, 161, 0.9);
+    text-align: center;
+}
+
+.battle-result .btn-block {
+    justify-content: center;
+}
+
+.battle-result p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.battle-result b {
+    font-weight: 600;
+    color: brown;
+    font-size: 20px;
+}
 .vasilisk-battle {
     width: 520px;
     right: 5px;

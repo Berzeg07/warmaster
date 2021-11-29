@@ -50,7 +50,7 @@ export default {
         if (localStorage.getItem('gameData') != null) {
             var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
             this.hero = gameDataResponse.hero;
-            console.log(this.hero)
+            // console.log(this.hero)
             var weapon = this.hero.heroWeapon,
                 equip = this.hero.heroEquip,
                 indexItem = this.findWithKey(this.hero.inventory, 'nameItem', weapon),

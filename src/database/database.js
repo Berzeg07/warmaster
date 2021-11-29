@@ -90,7 +90,8 @@ export var dataBase = {
         // Болотная крыса *
         rat: {
             name: 'Крыса',
-            damage: 12,
+            // damage: 12,
+            damage: 1,
             armor: 0,
             crit: 10,
             hitPoint: 100,
@@ -139,7 +140,7 @@ export var dataBase = {
         ork: {
             name: 'Орк',
             damage: 45,
-            armor: 5,
+            armor: 0,
             crit: 20,
             hitPoint: 100,
             image: '<div class="modal-enemy orc-battle" key="ork"><img src="img/orc.png" alt="Орк"></div>'
@@ -153,7 +154,7 @@ export var dataBase = {
         // equipArmor: 0,
         heroCrit: 20,
         heroHP: 100,
-        heroGold: 1000,
+        heroGold: 10000,
         heroWeapon: 'Пусто',
         heroEquip: 'Пусто',
         inventory: [
