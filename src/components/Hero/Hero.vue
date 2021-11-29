@@ -18,11 +18,14 @@
 
 <script>
 import heroImg from "@/assets/img/hero.png";
-// import heroBg from "@/assets/img/hero-bg.jpg";
 import destroyer from "@/assets/img/destroyer.png";
 import leatherarmor from "@/assets/img/light-armor.png";
 import axe from "@/assets/img/battle-axe.png";
 import dragonarmor from "@/assets/img/dragon-armor.png";
+import club from "@/assets/img/club.png";
+import heavyarmor from "@/assets/img/heavy-armor.png";
+import sword from "@/assets/img/sword.png";
+
 
 // Vuex *
 import { mapGetters, mapActions } from 'vuex'
@@ -41,7 +44,10 @@ export default {
                 destroyer,
                 leatherarmor,
                 axe,
-                dragonarmor
+                dragonarmor,
+                club,
+                heavyarmor,
+                sword
             }
 
         };
@@ -119,6 +125,21 @@ export default {
     top: 100px;
     left: 32px;
 }
+.heavyarmor {
+    width: 170px;
+    height: 369px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 90px;
+    left: 36px;
+}
+.club {
+    width: 65px;
+    height: 127px;
+    background-size: contain;
+    top: 257px;
+    left: 111px;
+}
 .destroyer {
     width: 193px;
     height: 251px;
@@ -143,5 +164,12 @@ export default {
     position: relative;
     bottom: -20px;
     z-index: 1;
+}
+.sword {
+    width: 86px;
+    height: 180px;
+    background-size: contain;
+    top: 242px;
+    left: 104px;
 }
 </style>

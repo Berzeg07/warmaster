@@ -5,7 +5,7 @@
             <div class="dialogue">
                 <p class="dialogue_article">
                     <b v-if="npcName">{{ npcName + ':' + ' ' }}</b>
-                    <span>{{ npcComment }}</span>
+                    <span ref="npcComment">{{ npcComment }}</span>
                 </p>
                 <div class="btn-block btn-block_dialogue">
                     <ul class="link-list">
@@ -51,6 +51,7 @@ import georgFarmWork from "@/assets/img/farm-loc.jpg";
 import selina from "@/assets/img/tavern-loc.jpg";
 import heroHouse from "@/assets/img/house-loc.jpg";
 import andreas from "@/assets/img/andreas-loc.jpg";
+import senteza from "@/assets/img/gerhard-loc.jpg";
 
 // Миксины *
 import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
@@ -87,7 +88,8 @@ export default {
                 georgFarmWork,
                 selina,
                 heroHouse,
-                andreas
+                andreas,
+                senteza
             },
         }
     },
@@ -126,13 +128,25 @@ export default {
             'HERO_HP_UPDATE_ACT',
             'HERO_GOLD_UPDATE_ACT',
             'HEROHOUSE_SHOW_ACT',
-            'HERO_DAMAGE_UPDATE_ACT'
+            'HERO_DAMAGE_UPDATE_ACT',
+            'FRIDRICKFARM_INNER_SHOW_ACT'
             // 'ANDREAS_TRAIN_UPDATE_ACT'
         ]),
         shopActions(action, event) {
             var price = event.currentTarget.getAttribute('price');
             var heroGold = this.gameData.hero.heroGold;
             const actions = {
+                paySenteza: () => {
+                    if (heroGold < 100) {
+                        this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = 2;
+                    } else {
+                        this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = 3;
+                        heroGold = heroGold - 100;
+                        this.gameData.hero.heroGold = heroGold;
+                        this.HERO_GOLD_UPDATE_ACT(heroGold);
+                    }
+                    this.updateData();
+                },
                 traning: () => {
                     var heroCurrentDamage = this.gameData.hero.heroDamage;
                     console.log('Андреас ', this.ANDREAS_TRAIN_STATE)
@@ -145,6 +159,7 @@ export default {
                                 this.gameData.hero.heroGold = heroGold;
                                 this.messWindow = `Ты хорошо потренировался, сила увеличена на 1`
                                 this.HERO_DAMAGE_UPDATE_ACT(heroCurrentDamage);
+                                this.HERO_GOLD_UPDATE_ACT(heroGold);
                             } else {
                                 this.messWindow = `Недостаточно золота для тренировок`
                             }
@@ -242,6 +257,9 @@ export default {
                 },
                 isShowFarm: () => {
                     this.FRIDRICKFARM_SHOW_ACT();
+                },
+                isSwowFarmInner: () => {
+                    this.FRIDRICKFARM_INNER_SHOW_ACT();
                 }
             }
             this.gameData.gameProgress[action] = true;

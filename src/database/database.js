@@ -4,10 +4,10 @@ export var dataBase = {
     currentEnemy: false,
     shopShow: false,
     gameProgress: {
-        isShowHorinis: true,
+        isShowHorinis: false,
         isShowFarm: false,
         isSwowFarmInner: false,
-        isShowHeroHouse: true,
+        isShowHeroHouse: false,
         // Не забыть активировать Андреаса в разговоре с Фридриком !!!!!!!
         isTrainAndreas: true
     },
@@ -44,7 +44,7 @@ export var dataBase = {
             typeItem: 'Броня',
             priceItem: '600',
             propertiesItem: 10,
-            classItem: 'heavy-armor'
+            classItem: 'heavyarmor'
         },
 
 
@@ -218,6 +218,92 @@ export var dataBase = {
         }]
     },
     charactersNPC: {
+        senteza: {
+            npcName: 'Сентеза',
+            dialogueLevel: 0,
+            sceneImage: 'senteza',
+            textContent: [
+                {
+                    textNPC: 'Кто ты такой и что тебе нужно?',
+                    heroComments: ['Что это за место?'],
+                    answearsNPC: {
+                        0: 'Ферма Онара, тут свои порядки, чужим тут не рады!'
+                    },
+                    heroActions: [
+                        {
+                            text: 'Я могу пройти?',
+                            attr: 'nextContent'
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'Пройти то конечно можно, но так как я первый раз тебя вижу гони сто монет!',
+                    heroComments: [],
+                    answearsNPC: {},
+                    shop: [
+                        {
+                            product: 'Заплатить',
+                            price: 100,
+                            attr: 'paySenteza'
+                        }
+                    ],
+                    heroActions: [
+                        {
+                            text: 'Вломить по полной!',
+                            attr: 'battle'
+                        },
+                        {
+                            text: 'Назад',
+                            attr: 'prevContent',
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'У тебя и 100 монет не наберется, пошел прочь оборванец!',
+                    heroComments: [],
+                    answearsNPC: {},
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'Правильное решение, проходи давай. Если создашь тут проблемы утоплю в помойной яме!',
+                    heroComments: [],
+                    answearsNPC: {},
+                    gameProgressPoint: ['isSwowFarmInner'],
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                            dialogueLevelAfterClose: 4,
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'Опять ты! Проваливай отсюда пока цел',
+                    heroComments: [],
+                    answearsNPC: {},
+                    heroActions: [
+                        {
+                            text: 'Вломить по полной!',
+                            attr: 'battle'
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                            dialogueLevelAfterClose: 4
+                        },
+                    ]
+                },
+            ]
+        },
         andreas: {
             npcName: 'Андреас',
             dialogueLevel: 0,

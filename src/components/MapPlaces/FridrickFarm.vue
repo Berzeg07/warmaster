@@ -1,7 +1,7 @@
 <template>
     <div class="farm">
         <div class="farm-inner">
-            <Tooltip class="gerhard">Сантино</Tooltip>
+            <Tooltip class="gerhard" @click.native="showScene('senteza', $event)">Сентеза</Tooltip>
             <Tooltip class="fridrick" v-if="FRIDRICKFARM_INNER_SHOW_STATE">Фридрик</Tooltip>
             <Tooltip class="job" v-if="FRIDRICKFARM_INNER_SHOW_STATE">Ферма</Tooltip>
         </div>
@@ -12,9 +12,12 @@
 import Tooltip from '@/components/Buttons/Tooltip.vue';
 // Vuex *
 import { mapActions, mapGetters } from 'vuex'
+// Миксины *
+import { sceneRender } from '@/mixins/mixins';
 
 export default {
     name: 'FridrickFarm',
+    mixins: [sceneRender],
     components: {
         Tooltip
     },
@@ -33,8 +36,13 @@ export default {
     },
     methods: {
         ...mapActions([
-            'FRIDRICKFARM_INNER_SHOW_ACT'
+            'FRIDRICKFARM_INNER_SHOW_ACT',
+            'OVERLAY_SHOW_ACT',
+            'MODAL_SHOW_ACT',
         ]),
+        showScene(scene, event) {
+            this.sceneRender(scene, event);
+        },
     }
 }
 </script>

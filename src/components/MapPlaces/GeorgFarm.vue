@@ -1,6 +1,6 @@
 <template>
     <div class="georg-farm">
-        <Tooltip @click.native="showScene" class="georg">Двор Георга</Tooltip>
+        <Tooltip @click.native="showScene('georgFarm', $event)" class="georg">Двор Георга</Tooltip>
     </div>
 </template>
 
@@ -21,8 +21,8 @@ export default {
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
         ]),
-        showScene() {
-            var gameDataResponse = this.sceneRender('georgFarm');
+        showScene(scene, event) {
+            var gameDataResponse = this.sceneRender(scene, event);
             if (gameDataResponse) {
                 var currentQuestList = gameDataResponse.hero.questList;
                 var newQuest = {

@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     // Затемнение заднего фона *
     // Изначально true !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    overlay: false,
+    overlay: true,
     // Вывод сцены *
     modalShow: false,
     // Вывод магазина *

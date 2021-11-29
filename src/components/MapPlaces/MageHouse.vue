@@ -1,6 +1,6 @@
 <template>
     <div class="mage">
-        <Tooltip @click.native="showScene" class="runolv">Рунольв</Tooltip>
+        <Tooltip @click.native="showScene('runolvHouseEmpty', $event)" class="runolv">Рунольв</Tooltip>
     </div>
 </template>
 
@@ -23,8 +23,8 @@ export default {
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
         ]),
-        showScene() {
-            var gameDataResponse = this.sceneRender('runolvHouseEmpty');
+        showScene(scene, event) {
+            var gameDataResponse = this.sceneRender(scene, event);
             if (gameDataResponse) {
                 var currentQuestList = gameDataResponse.hero.questList;
                 var newQuest = {
