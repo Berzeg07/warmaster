@@ -34,6 +34,7 @@
                             :actiontype="item.attr"
                             :enemy="item.enemy"
                             :dialogueLevelAfterClose="item.dialogueLevelAfterClose"
+                            :event="item.event"
                         >- {{ item.text }}</li>
                     </ul>
                 </div>
@@ -247,6 +248,15 @@ export default {
             this.sceneImage = this.currentCharacter.sceneImage;
             // console.log('this.newDialogueBranches ', this.newDialogueBranches);
         },
+        closeEvents(action) {
+            const actions = {
+                farmWorker: () => {
+                    this.gameData.hero.heroGold += 100;
+                    this.HERO_GOLD_UPDATE_ACT(this.gameData.hero.heroGold);
+                }
+            }
+            return actions[action]();
+        },
         closeScene(currentDialogueLevel) {
             if (currentDialogueLevel) {
                 this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = currentDialogueLevel;
@@ -334,6 +344,10 @@ export default {
                 // Закрытие сцены *
                 closeScene: (event) => {
                     var dialogueLevelAfterClose = event.currentTarget.getAttribute('dialogueLevelAfterClose');
+                    var checkEvent = event.currentTarget.getAttribute('event');
+                    if (checkEvent) {
+                        this.closeEvents(checkEvent);
+                    }
                     // Если требуется при следующем запуске сцены открыть нужную диалоговую ветку *
                     if (dialogueLevelAfterClose) {
                         this.closeScene(dialogueLevelAfterClose);

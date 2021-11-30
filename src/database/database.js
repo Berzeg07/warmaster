@@ -692,6 +692,31 @@ export var dataBase = {
                     heroActions: [
                         {
                             text: 'Уйти',
+                            attr: 'closeScene',
+                            dialogueLevelAfterClose: 1
+                        }
+                    ],
+                    answearsNPC: {}
+                },
+                {
+                    textNPC: 'Ты поработал на ферме (100 монет получено)',
+                    heroComments: [],
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                            dialogueLevelAfterClose: 2,
+                            event: 'farmWorker'
+                        }
+                    ],
+                    answearsNPC: {}
+                },
+                {
+                    textNPC: 'Работы больше нет',
+                    heroComments: [],
+                    heroActions: [
+                        {
+                            text: 'Уйти',
                             attr: 'closeScene'
                         }
                     ],

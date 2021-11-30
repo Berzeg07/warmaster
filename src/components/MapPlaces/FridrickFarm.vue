@@ -3,7 +3,11 @@
         <div class="farm-inner">
             <Tooltip class="gerhard" @click.native="showScene('senteza', $event)">Сентеза</Tooltip>
             <Tooltip class="fridrick" v-if="FRIDRICKFARM_INNER_SHOW_STATE">Фридрик</Tooltip>
-            <Tooltip class="job" v-if="FRIDRICKFARM_INNER_SHOW_STATE">Ферма</Tooltip>
+            <Tooltip
+                class="job"
+                @click.native="showScene('georgFarmWork', $event)"
+                v-if="FRIDRICKFARM_INNER_SHOW_STATE"
+            >Ферма</Tooltip>
         </div>
     </div>
 </template>
@@ -11,7 +15,7 @@
 <script>
 import Tooltip from '@/components/Buttons/Tooltip.vue';
 // Vuex *
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex';
 // Миксины *
 import { sceneRender } from '@/mixins/mixins';
 
