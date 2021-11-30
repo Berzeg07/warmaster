@@ -32,6 +32,7 @@
                             :key="item.text"
                             :level="item.level"
                             :actiontype="item.attr"
+                            :enemy="item.enemy"
                             :dialogueLevelAfterClose="item.dialogueLevelAfterClose"
                         >- {{ item.text }}</li>
                     </ul>
@@ -129,7 +130,9 @@ export default {
             'HERO_GOLD_UPDATE_ACT',
             'HEROHOUSE_SHOW_ACT',
             'HERO_DAMAGE_UPDATE_ACT',
-            'FRIDRICKFARM_INNER_SHOW_ACT'
+            'FRIDRICKFARM_INNER_SHOW_ACT',
+            'BATTLE_ACT',
+            'ENEMY_UPDATE_ACT'
             // 'ANDREAS_TRAIN_UPDATE_ACT'
         ]),
         shopActions(action, event) {
@@ -144,6 +147,8 @@ export default {
                         heroGold = heroGold - 100;
                         this.gameData.hero.heroGold = heroGold;
                         this.HERO_GOLD_UPDATE_ACT(heroGold);
+                        this.gameData.gameProgress.isSwowFarmInner = true;
+                        this.FRIDRICKFARM_INNER_SHOW_ACT();
                     }
                     this.updateData();
                 },
@@ -243,10 +248,13 @@ export default {
             // console.log('this.newDialogueBranches ', this.newDialogueBranches);
         },
         closeScene(currentDialogueLevel) {
-            this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = currentDialogueLevel;
+            if (currentDialogueLevel) {
+                this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = currentDialogueLevel;
+            }
             this.gameData.gameSceneCurrent = null;
             var serialDataBase = JSON.stringify(this.gameData);
             localStorage.setItem("gameData", serialDataBase);
+            // console.log(currentDialogueLevel)
             this.OVERLAY_HIDE_ACT();
             this.MODAL_SHOW_ACT();
         },
@@ -268,6 +276,19 @@ export default {
         heroActionEvent(action, event) {
             var checkLevel = event.currentTarget.getAttribute('level');
             const actions = {
+                battle: (event) => {
+                    var target = event.target.getAttribute('enemy');
+                    this.gameData.currentEnemy = target;
+                    this.gameData.gameFightScene = true;
+
+                    this.closeScene();
+
+                    this.$nextTick(() => {
+                        this.OVERLAY_SHOW_ACT();
+                        this.BATTLE_ACT();
+                        this.ENEMY_UPDATE_ACT(target);
+                    });
+                },
                 // Отдых дома *
                 rest: () => {
                     var heroHP = this.gameData.hero.heroHP;
@@ -284,7 +305,7 @@ export default {
                 workOnGeorgFarm: () => {
                     this.closeScene(3);
                     this.$nextTick(() => {
-                        this.sceneRender('georgFarmWork');
+                        this.sceneRender('georgFarmWork', event);
                     });
                 },
                 // Вывод комментариев NPC в текущей ветке *

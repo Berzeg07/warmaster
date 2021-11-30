@@ -96,6 +96,8 @@ import Hero from '@/components/Hero/Hero.vue';
 import rat from "@/assets/img/rat.png";
 import varg from "@/assets/img/varg.png";
 import vasilisk from "@/assets/img/vasilisk.png";
+import senteza from "@/assets/img/gerhard.png";
+
 
 // Vuex *
 import { mapActions, mapGetters, } from 'vuex';
@@ -128,12 +130,14 @@ export default {
             enemyImg: {
                 rat,
                 varg,
-                vasilisk
+                vasilisk,
+                senteza
             },
             enemyClass: {
                 rat: 'rat-battle',
                 varg: 'varg-battle',
-                vasilisk: 'vasilisk-battle'
+                vasilisk: 'vasilisk-battle',
+                senteza: 'gerhard-battle'
             },
             gameData: {},
             heroData: {},
@@ -159,7 +163,10 @@ export default {
             'OVERLAY_SHOW_ACT',
             'BATTLE_ACT',
             'OVERLAY_HIDE_ACT',
-            'ENEMY_UPDATE_ACT'
+            'ENEMY_UPDATE_ACT',
+            'HERO_HP_UPDATE_ACT',
+            'HERO_GOLD_UPDATE_ACT',
+            'FRIDRICKFARM_INNER_SHOW_ACT'
         ]),
         critChance() {
             var rand = 1 - 0.5 + Math.random() * (100 - 1 + 1)
@@ -174,12 +181,36 @@ export default {
             localStorage.setItem("gameData", serialDataBase);
             this.OVERLAY_HIDE_ACT();
             this.BATTLE_ACT();
+            this.HERO_HP_UPDATE_ACT(this.heroHP);
+        },
+        battleActions(action, fightResult) {
+            var res = fightResult;
+            const actions = {
+                paySenteza: () => {
+                    if (res == 'win') {
+                        this.gameData.hero.heroGold += 300;
+                        this.HERO_GOLD_UPDATE_ACT(this.gameData.hero.heroGold);
+                        this.battleResult.resultText = 'Ты навалял Сентезе и отжал кошелек (300 монет)';
+                        this.gameData.charactersNPC.senteza.dialogueLevel = 5;
+                        this.gameData.gameProgress.isSwowFarmInner = true;
+                        this.FRIDRICKFARM_INNER_SHOW_ACT();
+                    } else {
+                        this.gameData.hero.heroGold = 0;
+                        this.HERO_GOLD_UPDATE_ACT(0);
+                        this.gameData.charactersNPC.senteza.dialogueLevel = 4;
+                        this.battleResult.resultText = 'Сентеза навалял тебе, забрал все деньги и искупал в помойной яме'
+                    }
+                },
+            }
+            return actions[action]();
         },
         battle() {
             var heroDamage = this.heroDamage,
                 enemyDamage = this.currentEnemy.damage,
                 heroCritChance = this.critChance(),
-                enemyCritChance = this.critChance();
+                enemyCritChance = this.critChance(),
+                actions = this.currentEnemy.action;
+            // console.log(this.currentEnemy)
 
             if (heroCritChance <= this.heroData.heroCrit) {
                 heroDamage *= 2;
@@ -197,6 +228,9 @@ export default {
                 this.heroHP = 1;
                 this.battleResult.resultText = 'Поражение! Ты тяжело ранен и чудом сумел скрыться';
                 this.battleResult.isShowResult = true;
+                if (actions) {
+                    this.battleActions(actions.typeAction, 'loose');
+                }
             }
 
             if (this.currentEnemy.hitPoint <= 0) {
@@ -222,6 +256,9 @@ export default {
                     }
                     this.battleResult.resultText = `Победа! Добыча: ${lootName}`;
                 }
+                if (actions) {
+                    this.battleActions(actions.typeAction, 'win');
+                }
             }
             console.log(this.currentEnemy.hitPoint);
         }
@@ -230,6 +267,17 @@ export default {
 </script>
 
 <style scoped>
+.orc-battle,
+.gerhard-battle {
+    width: 420px;
+    right: 30px;
+    bottom: 20px;
+}
+
+.gerhard-battle {
+    width: 205px;
+    bottom: 45px;
+}
 .overlay-battle {
     width: 100%;
     height: 100%;

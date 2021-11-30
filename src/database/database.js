@@ -4,8 +4,8 @@ export var dataBase = {
     currentEnemy: false,
     shopShow: false,
     gameProgress: {
-        isShowHorinis: false,
-        isShowFarm: false,
+        isShowHorinis: true,
+        isShowFarm: true,
         isSwowFarmInner: false,
         isShowHeroHouse: false,
         // Не забыть активировать Андреаса в разговоре с Фридриком !!!!!!!
@@ -87,7 +87,17 @@ export var dataBase = {
         }
     ],
     enemy: {
-        // Болотная крыса *
+        senteza: {
+            name: 'Сентеза',
+            // damage: 35,
+            damage: 1,
+            armor: 0,
+            crit: 10,
+            hitPoint: 100,
+            action: {
+                typeAction: 'paySenteza'
+            }
+        },
         rat: {
             name: 'Крыса',
             // damage: 12,
@@ -102,9 +112,7 @@ export var dataBase = {
                 propertiesItem: 'Для продажи',
                 countItem: 1
             },
-            image: '<div class="modal-enemy rat-battle" key="rat"><img src="img/rat.png" alt="Болотная крыса"></div>'
         },
-        // Варг *
         varg: {
             name: 'Варг',
             damage: 30,
@@ -118,9 +126,7 @@ export var dataBase = {
                 propertiesItem: 'Для продажи',
                 countItem: 1
             },
-            image: '<div class="modal-enemy varg-battle" key="varg"><img src="img/varg.png" alt="Варг"></div>'
         },
-        // Василиск *
         vasilisk: {
             name: 'Василиск',
             damage: 40,
@@ -134,16 +140,13 @@ export var dataBase = {
                 propertiesItem: 'Для продажи',
                 countItem: 1
             },
-            image: '<div class="modal-enemy vasilisk-battle" key="vasilisk"><img src="img/vasilisk.png" alt="Василиск"></div>'
         },
-        // Орк *
         ork: {
             name: 'Орк',
             damage: 45,
             armor: 0,
             crit: 20,
             hitPoint: 100,
-            image: '<div class="modal-enemy orc-battle" key="ork"><img src="img/orc.png" alt="Орк"></div>'
         }
     },
     hero: {
@@ -254,7 +257,8 @@ export var dataBase = {
                     heroActions: [
                         {
                             text: 'Вломить по полной!',
-                            attr: 'battle'
+                            attr: 'battle',
+                            enemy: 'senteza'
                         },
                         {
                             text: 'Назад',
@@ -293,7 +297,8 @@ export var dataBase = {
                     heroActions: [
                         {
                             text: 'Вломить по полной!',
-                            attr: 'battle'
+                            attr: 'battle',
+                            enemy: 'senteza'
                         },
                         {
                             text: 'Уйти',
@@ -302,6 +307,17 @@ export var dataBase = {
                         },
                     ]
                 },
+                {
+                    textNPC: 'Ладно, у тебя железные яйца, я уяснил, можешь проходить',
+                    heroComments: [],
+                    answearsNPC: {},
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene'
+                        },
+                    ]
+                }
             ]
         },
         andreas: {
