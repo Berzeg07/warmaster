@@ -6,10 +6,11 @@ export var dataBase = {
     gameProgress: {
         isShowHorinis: true,
         isShowFarm: true,
-        isSwowFarmInner: false,
+        isSwowFarmInner: true,
         isShowHeroHouse: false,
-        // Не забыть активировать Андреаса в разговоре с Фридриком !!!!!!!
-        isTrainAndreas: true
+        isTrainAndreas: false,
+        isShowBernard: true,
+        isShowHollow: false
     },
     newDialogueComments: {
         georgFarm: {
@@ -23,6 +24,24 @@ export var dataBase = {
                         {
                             text: 'У меня есть пропуск',
                             attr: 'nextContent'
+                        }
+                    ],
+                    // answearsNPC: {}
+                }
+            }
+        },
+        onar: {
+            nagur: {
+                isAddDataBase: false,
+                dialogueLevel: 1,
+                targetForThisBranch: 'selina',
+                textContent: {
+                    // heroComments: [],
+                    heroActions: [
+                        {
+                            text: 'Мне нужно пройти в туманную лощину, знаешь кого то, кто может помочь с этим?',
+                            attr: 'nextContent',
+                            level: 5
                         }
                     ],
                     // answearsNPC: {}
@@ -160,67 +179,135 @@ export var dataBase = {
         heroGold: 10000,
         heroWeapon: 'Пусто',
         heroEquip: 'Пусто',
-        inventory: [
-            // {
-            //     nameItem: 'Меч Беллиара',
-            //     typeItem: 'Урон',
-            //     priceItem: '1000',
-            //     propertiesItem: 30,
-            //     classItem: 'destroyer',
-            //     countItem: 2
-            // },
-            // {
-            //     nameItem: 'Сокрушитель',
-            //     typeItem: 'Урон',
-            //     priceItem: '1000',
-            //     propertiesItem: 25,
-            //     classItem: 'axe',
-            //     countItem: 2
-            // },
-            // {
-            //     nameItem: 'Кожаная броня',
-            //     typeItem: 'Броня',
-            //     priceItem: '1000',
-            //     propertiesItem: 5,
-            //     classItem: 'leatherarmor',
-            //     countItem: 2
-            // },
-            // {
-            //     nameItem: 'Панцирь Дракона',
-            //     typeItem: 'Броня',
-            //     priceItem: '1000',
-            //     propertiesItem: 15,
-            //     classItem: 'dragonarmor',
-            //     countItem: 2
-            // },
-            // {
-            //     nameItem: 'Шкура варга',
-            //     typeItem: 'Предмет',
-            //     priceItem: 150,
-            //     propertiesItem: 'Для продажи',
-            //     countItem: 2
-            // },
-            // {
-            //     nameItem: 'Рог мракориса',
-            //     typeItem: 'Предмет',
-            //     priceItem: 150,
-            //     propertiesItem: 'Для продажи',
-            //     countItem: 10
-            // },
-            // {
-            //     nameItem: 'Хвост крысы',
-            //     typeItem: 'Предмет',
-            //     priceItem: 150,
-            //     propertiesItem: 'Для продажи',
-            //     countItem: 3
-            // }
-        ],
+        inventory: [],
         questList: [{
             questTitle: 'Начало',
             questArticle: ['Добрый маг привел меня в чувство и дал не много денег. Нужно добраться до города и осмотреться, может подвернеться какое ни будь дельце']
         }]
     },
     charactersNPC: {
+        hollow: {
+            npcName: '',
+            dialogueLevel: 0,
+            sceneImage: 'hollow',
+            textContent: [
+                {
+                    textNPC: 'Туманная лощина опасное место, без карты или проводника лучше туда не соваться',
+                    heroComments: [],
+                    answearsNPC: {},
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'Ты исследовал тропы указанные на карте, обходя опасные места в поисках следов Джерарда, пока наконец не обнаружил следы сапог. Идя по следу ты наткнулся на пещеру из которой пахло дымом от костра, оказалось за тобой следили, вдруг ты услышал за спиной нечеловеческий рев!',
+                    heroComments: [],
+                    answearsNPC: {},
+                    heroActions: [
+                        {
+                            text: 'Приготовиться к бою!',
+                            attr: 'battle',
+                            enemy: 'ork'
+                        },
+                    ]
+                },
+            ]
+        },
+        bernard: {
+            npcName: 'Бернард',
+            dialogueLevel: 0,
+            sceneImage: 'nagur',
+            textContent: [
+                {
+                    textNPC: 'Если тебя интересует карта топей, у меня она самая точная',
+                    heroComments: [],
+                    answearsNPC: {},
+                    shop: [
+                        {
+                            product: 'Купить карту',
+                            price: 150,
+                            attr: 'bernardMap'
+                        }
+                    ],
+                    heroActions: [
+                        {
+                            text: 'Говорить',
+                            attr: 'nextContent',
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'Что тебя интересует?',
+                    heroComments: ['Ты можешь сам провести через болота?', 'На сколько надежны твои карты?', 'Какие монстры там водятся?'],
+                    answearsNPC: {
+                        0: 'Я больше не хожу в туманную лощину, стало слишком опасно, тварей развелось всяких. Не давно приходили за картой пара головорезов Фридрика, из лощины они не вернулись',
+                        1: 'Эти карты я писал еще во времена войны с орками когда жил в болотах и дополнял каждый раз когда ходил в те места до последнего времени, можешь не сомневаться в точности. В те смутные времена, не мало крови мы пустили оркам с моими храбрецами',
+                        2: 'Говорят на опушке видели орка, если это так то это грозный противник. Ни один из тех кто ходил в топь в последнее время так и не вернулся, будь осторожен'
+                    },
+                    heroActions: [
+                        {
+                            text: 'Назад',
+                            attr: 'prevContent',
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                },
+            ]
+        },
+        onar: {
+            npcName: 'Фридрик',
+            dialogueLevel: 0,
+            sceneImage: 'onar',
+            textContent: [
+                {
+                    textNPC: 'Что привело тебя на мою землю?',
+                    heroComments: [],
+                    answearsNPC: {},
+                    heroActions: [
+                        {
+                            text: 'Я тот, кто готов решить твои проблемы. Мне нужна детальная информация',
+                            attr: 'nextContent'
+                        },
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                },
+                {
+                    textNPC: 'Джерард слинял, прихватив мой сундук с ценным содержимым, мне нужно вернуть мое имущество',
+                    heroComments: ['Есть предположение куда мог скрыться Джерард?', 'Чего мне стоит ожидать?', 'Сколько я получу за это дело?', 'Почему ты уверен, что я не сбегу с твоим сундуком в случае успеха?'],
+                    answearsNPC: {
+                        0: 'Кругом отвесные скалы, из этой долины только два выхода, по морю или через перевал. Ни там, ни там муха не пролезет без моего ведома. Мои люди обшарили все окрестности, есть только одно место куда он мог бежать и куда мне пока не добраться, туманная лощина. Я послал туда лучших людей, ни один не вернулся, опасное место',
+                        1: 'Джерард искусен в обращении с двуручным мечом. Андреас тебя потренерует, найдешь его в порту в городе, я дам ему знать, чтобы он взялся за тебя',
+                        2: 'Награда будет щедрой, 1000 монет за сундук и еще 1000 за голову Джерарда',
+                        3: 'Как я и сказал, на этом острове ничего не происходит без моего ведома, мои люди повсюду, я все вижу'
+                    },
+                    gameProgressPoint: ['isTrainAndreas'],
+                    newDialogueBranches: 'nagur',
+                    questAdd: {
+                        questTitle: 'Пропавший помощник',
+                        questArticle: 'Фридрик обещал 2000 золотых монет за голову Джерарда и сундук, который он украл. Предстоит путь в туманную лощину, но я не знаю эти болота, надо распросить в городе'
+                    },
+                    heroActions: [
+                        {
+                            text: 'Уйти',
+                            attr: 'closeScene',
+                        },
+                    ]
+                }
+            ]
+        },
         senteza: {
             npcName: 'Сентеза',
             dialogueLevel: 0,
@@ -495,6 +582,21 @@ export var dataBase = {
                             attr: 'renta'
                         },
                     ],
+                    heroActions: [
+                        {
+                            text: 'Назад',
+                            attr: 'prevContent',
+                            level: 0
+                        }
+                    ],
+                },
+                {
+                    textNPC: 'На окраине города живет пожилой вояка, Бернард. Когда то он воевал с орками, скрываясь с отрядом в туманной лощине, он знает топь вдоль и поперек. За не большие деньги он продаст тебе карту топей, где отмечены все безопасные участки',
+                    gameProgressPoint: ['isShowBernard'],
+                    questAdd: {
+                        questTitle: 'Пропавший помощник',
+                        questArticle: 'Нужно поговорить с Бернардом, он поможет безопасно пройти в туманную лощину'
+                    },
                     heroActions: [
                         {
                             text: 'Назад',

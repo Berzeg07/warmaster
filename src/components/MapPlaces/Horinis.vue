@@ -11,7 +11,11 @@
                 >Дом</Tooltip>
                 <!-- <Tooltip class="garold">Гарольд</Tooltip> -->
                 <Tooltip @click.native="showScene(null, $event)" class="shop" sceneType="shop">Лавка</Tooltip>
-                <Tooltip class="bernard" v-if="BERNARD_SHOW_STATE">Бернард</Tooltip>
+                <Tooltip
+                    class="bernard"
+                    @click.native="showScene('bernard', $event)"
+                    v-if="BERNARD_SHOW_STATE"
+                >Бернард</Tooltip>
             </div>
             <Tooltip
                 @click.native="showScene('horinisGuard', $event)"
@@ -47,6 +51,9 @@ export default {
             if (gameDataResponse.gameProgress.isTrainAndreas) {
                 this.ANDREAS_TRAIN_UPDATE_ACT();
             }
+            if (gameDataResponse.gameProgress.isShowBernard) {
+                this.BERNARD_SHOW_ACT();
+            }
         }
     },
     computed: {
@@ -64,7 +71,8 @@ export default {
             'HORINIS_SHOW_ACT',
             'HEROHOUSE_SHOW_ACT',
             'ANDREAS_TRAIN_UPDATE_ACT',
-            'SHOP_SHOW_ACT'
+            'SHOP_SHOW_ACT',
+            'BERNARD_SHOW_ACT'
         ]),
         showScene(scene, event) {
             var gameDataResponse = this.sceneRender(scene, event);

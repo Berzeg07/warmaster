@@ -57,7 +57,7 @@
                             <div class="battle-options_inner">
                                 <ul class="battle-list">
                                     <li>
-                                        <p class="battle-list_title">Василиск</p>
+                                        <p class="battle-list_title">{{ currentEnemy.name }}</p>
                                     </li>
                                     <li>
                                         <b>Урон:</b>
@@ -97,6 +97,8 @@ import rat from "@/assets/img/rat.png";
 import varg from "@/assets/img/varg.png";
 import vasilisk from "@/assets/img/vasilisk.png";
 import senteza from "@/assets/img/gerhard.png";
+import ork from "@/assets/img/orc.png";
+
 
 
 // Vuex *
@@ -131,13 +133,15 @@ export default {
                 rat,
                 varg,
                 vasilisk,
-                senteza
+                senteza,
+                ork
             },
             enemyClass: {
                 rat: 'rat-battle',
                 varg: 'varg-battle',
                 vasilisk: 'vasilisk-battle',
-                senteza: 'gerhard-battle'
+                senteza: 'gerhard-battle',
+                ork: 'orc-battle'
             },
             gameData: {},
             heroData: {},
@@ -267,15 +271,15 @@ export default {
 </script>
 
 <style scoped>
-.orc-battle,
-.gerhard-battle {
-    width: 420px;
+.orc-battle {
+    width: 370px;
     right: 30px;
     bottom: 20px;
 }
 
 .gerhard-battle {
     width: 205px;
+    right: 30px;
     bottom: 45px;
 }
 .overlay-battle {

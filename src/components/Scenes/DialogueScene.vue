@@ -54,6 +54,9 @@ import selina from "@/assets/img/tavern-loc.jpg";
 import heroHouse from "@/assets/img/house-loc.jpg";
 import andreas from "@/assets/img/andreas-loc.jpg";
 import senteza from "@/assets/img/gerhard-loc.jpg";
+import onar from "@/assets/img/fridrick-loc.jpg";
+import nagur from "@/assets/img/nagur-loc.jpg";
+import hollow from "@/assets/img/hollow-loc.jpg";
 
 // Миксины *
 import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
@@ -83,6 +86,9 @@ export default {
             gameProgressPoint: [],
             newDialogueBranches: '',
             sceneClasses: {
+                hollow,
+                nagur,
+                onar,
                 runolv: sceneImage,
                 runolvEmptyHouse,
                 horinisGuard,
@@ -113,7 +119,8 @@ export default {
         ...mapGetters([
             'MODAL_SHOW_STATE',
             'HEROHOUSE_SHOW_STATE',
-            'ANDREAS_TRAIN_STATE'
+            'ANDREAS_TRAIN_STATE',
+            'HOLLOW_SHOW_STATE'
         ]),
         sceneData() {
             // Фоновая картинки сцены * 
@@ -133,13 +140,32 @@ export default {
             'HERO_DAMAGE_UPDATE_ACT',
             'FRIDRICKFARM_INNER_SHOW_ACT',
             'BATTLE_ACT',
-            'ENEMY_UPDATE_ACT'
-            // 'ANDREAS_TRAIN_UPDATE_ACT'
+            'ENEMY_UPDATE_ACT',
+            'ANDREAS_TRAIN_UPDATE_ACT',
+            'BERNARD_SHOW_ACT',
+            'HOLLOW_SHOW_ACT'
         ]),
         shopActions(action, event) {
             var price = event.currentTarget.getAttribute('price');
             var heroGold = this.gameData.hero.heroGold;
             const actions = {
+                bernardMap: () => {
+                    if (!this.HOLLOW_SHOW_STATE) {
+                        this.HOLLOW_SHOW_ACT();
+                        if (price <= heroGold) {
+                            heroGold = heroGold - price;
+                            this.gameData.hero.heroGold = heroGold;
+                            this.gameData.charactersNPC.hollow.dialogueLevel = 1;
+                            this.gameData.gameProgress.isShowHollow = true;
+                            this.messWindow = `Карта куплена`
+                            this.HERO_GOLD_UPDATE_ACT(heroGold);
+                        } else {
+                            this.messWindow = `Недостаточно золота для покупки`
+                        }
+                    } else {
+                        this.messWindow = `Ты уже купил карту`
+                    }
+                },
                 paySenteza: () => {
                     if (heroGold < 100) {
                         this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = 2;
@@ -278,6 +304,12 @@ export default {
                 },
                 isSwowFarmInner: () => {
                     this.FRIDRICKFARM_INNER_SHOW_ACT();
+                },
+                isTrainAndreas: () => {
+                    this.ANDREAS_TRAIN_UPDATE_ACT();
+                },
+                isShowBernard: () => {
+                    this.BERNARD_SHOW_ACT();
                 }
             }
             this.gameData.gameProgress[action] = true;

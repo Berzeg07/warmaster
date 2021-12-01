@@ -2,7 +2,11 @@
     <div class="farm">
         <div class="farm-inner">
             <Tooltip class="gerhard" @click.native="showScene('senteza', $event)">Сентеза</Tooltip>
-            <Tooltip class="fridrick" v-if="FRIDRICKFARM_INNER_SHOW_STATE">Фридрик</Tooltip>
+            <Tooltip
+                class="fridrick"
+                @click.native="showScene('onar', $event)"
+                v-if="FRIDRICKFARM_INNER_SHOW_STATE"
+            >Фридрик</Tooltip>
             <Tooltip
                 class="job"
                 @click.native="showScene('georgFarmWork', $event)"

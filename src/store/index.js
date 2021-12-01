@@ -27,7 +27,8 @@ export default new Vuex.Store({
       fridrickFarmInner: false,
       heroHouse: false,
       bernard: false,
-      isTrainAndreas: false
+      isTrainAndreas: false,
+      isShowHollow: false
     },
     hero: {
       heroHP: 100,
@@ -43,6 +44,9 @@ export default new Vuex.Store({
     intro: true
   },
   mutations: {
+    HOLLOW_SHOW(state) {
+      state.isShowPlace.isShowHollow = true;
+    },
     ENEMY_UPDATE(state, enemy) {
       state.currentEnemy = enemy;
     },
@@ -111,6 +115,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    HOLLOW_SHOW_ACT(context) {
+      context.commit('HOLLOW_SHOW');
+    },
     ENEMY_UPDATE_ACT(context, enemy) {
       context.commit('ENEMY_UPDATE', enemy);
     },
@@ -179,6 +186,9 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    HOLLOW_SHOW_STATE(state) {
+      return state.isShowPlace.isShowHollow;
+    },
     ENEMY_STATE(state) {
       return state.currentEnemy;
     },
