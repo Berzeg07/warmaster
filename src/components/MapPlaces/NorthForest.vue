@@ -68,6 +68,7 @@ export default {
     height: 180px;
     left: 126px;
     top: 90px;
+    z-index: 10;
 }
 
 .forest-inner {

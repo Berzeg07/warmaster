@@ -188,7 +188,7 @@ export default {
                 },
                 traning: () => {
                     var heroCurrentDamage = this.gameData.hero.heroDamage;
-                    console.log('Андреас ', this.ANDREAS_TRAIN_STATE)
+                    // console.log('Андреас ', this.ANDREAS_TRAIN_STATE)
                     if (this.ANDREAS_TRAIN_STATE) {
                         if (heroCurrentDamage < 15) {
                             if (price <= heroGold) {
@@ -465,7 +465,7 @@ export default {
             if (this.gameProgressPoint != undefined) {
                 for (var point = 0; point < this.gameProgressPoint.length; point++) {
                     var item = this.gameProgressPoint[point];
-                    console.log(item);
+                    // console.log(item);
                     if (this.gameData.gameProgress[item] != true) {
                         this.gameData.gameProgress[item] = true;
                         this.vuexActions(item);

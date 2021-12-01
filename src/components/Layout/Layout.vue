@@ -21,6 +21,12 @@
         <DialogueScene v-if="MODAL_SHOW_STATE" :class="checkModalState" />
         <ShopScene v-if="SHOP_SHOW_STATE" :class="checkShopState" />
         <BattleScene v-if="BATTLE_STATE" :class="checkBattleState" />
+        <div class="restart">
+            <button
+                class="btn"
+                @click="restartGame"
+            >Начать сначала (После обвноления нужно сбросить кеш ctrl+F5)</button>
+        </div>
     </div>
 </template>
 
@@ -169,12 +175,42 @@ export default {
         ]),
         hideIntro(data) {
             this.isShowIntro = data.intro;
-        }
+        },
+        restartGame() {
+            localStorage.clear();
+            // location.reload();
+            window.location.reload(true)
+        },
     }
 }
 </script>
 
 <style scoped>
+.btn {
+    font-size: 17px;
+    background: white;
+    border: none;
+    border-radius: 5px;
+    border: 2px solid orange;
+    cursor: pointer;
+    padding: 4px 12px;
+    margin-right: 4px;
+    transition: 0.5s;
+    color: black;
+}
+
+.btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+.restart {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 50px;
+    z-index: 9;
+}
+
 .content {
     display: -webkit-flex;
     display: -ms-flex;

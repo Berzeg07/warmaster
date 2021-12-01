@@ -108,8 +108,8 @@ export var dataBase = {
     enemy: {
         senteza: {
             name: 'Сентеза',
-            // damage: 35,
-            damage: 1,
+            damage: 35,
+            // damage: 1,
             armor: 0,
             crit: 10,
             hitPoint: 100,
@@ -120,7 +120,8 @@ export var dataBase = {
         rat: {
             name: 'Крыса',
             // damage: 12,
-            damage: 1,
+            damage: 10,
+            // damage: 1,
             armor: 0,
             crit: 10,
             hitPoint: 100,
@@ -134,7 +135,8 @@ export var dataBase = {
         },
         varg: {
             name: 'Варг',
-            damage: 30,
+            // damage: 30,
+            damage: 20,
             armor: 0,
             crit: 10,
             hitPoint: 100,
@@ -148,7 +150,8 @@ export var dataBase = {
         },
         vasilisk: {
             name: 'Василиск',
-            damage: 40,
+            // damage: 40,
+            damage: 30,
             armor: 0,
             crit: 10,
             hitPoint: 100,
@@ -162,8 +165,9 @@ export var dataBase = {
         },
         ork: {
             name: 'Орк',
+            damage: 40,
             // damage: 45,
-            damage: 1,
+            // damage: 1,
             armor: 0,
             crit: 20,
             hitPoint: 100,
@@ -177,10 +181,9 @@ export var dataBase = {
         heroDamage: 10,
         weaponDamage: 0,
         heroArmor: 0,
-        // equipArmor: 0,
         heroCrit: 20,
         heroHP: 100,
-        heroGold: 10000,
+        heroGold: 100,
         heroWeapon: 'Пусто',
         heroEquip: 'Пусто',
         inventory: [],
@@ -282,13 +285,13 @@ export var dataBase = {
                             text: 'По рукам, я с вами!',
                             attr: 'newScene',
                             sceneName: 'finalScene',
-                            level: 0
+                            level: 1
                         },
                         {
                             text: 'Ты подлый лжец Рунольв! Я убью вас обоих!',
                             attr: 'newScene',
                             sceneName: 'finalScene',
-                            level: 1
+                            level: 0
                         }
                     ]
                 }

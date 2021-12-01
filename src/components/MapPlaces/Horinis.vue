@@ -104,6 +104,7 @@ export default {
     left: 193px;
     bottom: 220px;
     width: 188px;
+    height: 124px;
     height: 150px;
 }
 
