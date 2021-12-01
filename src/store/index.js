@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     // Затемнение заднего фона *
     // Изначально true !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    overlay: false,
+    overlay: true,
     // Вывод сцены *
     modalShow: false,
     // Вывод магазина *
@@ -28,7 +28,7 @@ export default new Vuex.Store({
       heroHouse: false,
       bernard: false,
       isTrainAndreas: false,
-      isShowHollow: false
+      isShowHollow: false,
     },
     hero: {
       heroHP: 100,

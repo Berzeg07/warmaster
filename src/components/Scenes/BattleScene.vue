@@ -190,6 +190,11 @@ export default {
         battleActions(action, fightResult) {
             var res = fightResult;
             const actions = {
+                isHollowAfterOrk: () => {
+                    if (res == 'win') {
+                        this.gameData.charactersNPC.hollow.dialogueLevel = 2;
+                    }
+                },
                 paySenteza: () => {
                     if (res == 'win') {
                         this.gameData.hero.heroGold += 300;

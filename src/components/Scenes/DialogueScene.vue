@@ -35,6 +35,8 @@
                             :enemy="item.enemy"
                             :dialogueLevelAfterClose="item.dialogueLevelAfterClose"
                             :event="item.event"
+                            :sceneName="item.sceneName"
+                            :newNpcName="item.newNpcName"
                         >- {{ item.text }}</li>
                     </ul>
                 </div>
@@ -57,6 +59,9 @@ import senteza from "@/assets/img/gerhard-loc.jpg";
 import onar from "@/assets/img/fridrick-loc.jpg";
 import nagur from "@/assets/img/nagur-loc.jpg";
 import hollow from "@/assets/img/hollow-loc.jpg";
+import final from "@/assets/img/final-loc.jpg";
+import finalScene from "@/assets/img/bg-main.jpg";
+
 
 // Миксины *
 import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
@@ -86,6 +91,8 @@ export default {
             gameProgressPoint: [],
             newDialogueBranches: '',
             sceneClasses: {
+                finalScene,
+                final,
                 hollow,
                 nagur,
                 onar,
@@ -318,6 +325,21 @@ export default {
         heroActionEvent(action, event) {
             var checkLevel = event.currentTarget.getAttribute('level');
             const actions = {
+                restartGame: () => {
+                    localStorage.clear();
+                    location.reload();
+                },
+                newScene: (event) => {
+                    var target = event.target.getAttribute('sceneName');
+                    var level = event.currentTarget.getAttribute('level');
+                    if (level) {
+                        this.gameData.charactersNPC[target].dialogueLevel = level;
+                    }
+                    this.closeScene();
+                    this.$nextTick(() => {
+                        this.sceneRender(target, event);
+                    });
+                },
                 battle: (event) => {
                     var target = event.target.getAttribute('enemy');
                     this.gameData.currentEnemy = target;
@@ -356,13 +378,19 @@ export default {
                     this.npcComment = this.answearsNPC[targetIndex];
                 },
                 // Переход на новую ветку *
-                nextContent: () => {
+                nextContent: (event) => {
+                    var target = event.currentTarget.getAttribute('newNpcName');
+
                     if (checkLevel) {
                         this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = checkLevel;
                     } else {
                         this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel++;
                     }
                     this.updateData();
+
+                    if (target) {
+                        this.npcName = target;
+                    }
                 },
                 // Возврат к предыдущей *
                 prevContent: () => {

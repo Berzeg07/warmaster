@@ -87,14 +87,14 @@ export default {
         return {
             modalShow: 'modalshow',
             // Изначально true !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            isShowIntro: false,
+            isShowIntro: true,
             backgroundUrl,
             backgroundMap,
         };
     },
     mounted() {
         // Очистка базы для отладки **************** !!!
-        localStorage.clear();
+        // localStorage.clear();
 
         // Запись в locale storage первичной структуры базы данных *
         if (localStorage.getItem('gameData') == null) {
