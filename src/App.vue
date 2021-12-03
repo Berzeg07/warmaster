@@ -7,11 +7,20 @@
 <script>
 // import HelloWorld from './components/HelloWorld.vue';
 import Layout from '@/components/Layout/Layout.vue';
+// Стартовый объект базы данных *
+import { dataBase } from '@/database/database';
 
 export default {
   name: 'App',
   components: {
     Layout
+  },
+  mounted() {
+    // localStorage.clear();
+    if (!localStorage.getItem('gameData')) {
+      var serialDataBase = JSON.stringify(dataBase);
+      localStorage.setItem("gameData", serialDataBase);
+    }
   }
 }
 </script>

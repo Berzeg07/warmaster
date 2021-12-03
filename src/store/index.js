@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    gameData: {},
     // Затемнение заднего фона *
     // Изначально true !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     overlay: true,
@@ -113,8 +114,19 @@ export default new Vuex.Store({
     BERNARD_SHOW(state) {
       state.isShowPlace.bernard = true;
     },
+    GAME_DATA_UPDATE(state, data) {
+      state.gameData = data;
+    },
   },
   actions: {
+    GAME_DATA_ACT({ commit }) {
+      if (localStorage.getItem('gameData') != null) {
+        var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+        commit('GAME_DATA_UPDATE', gameDataResponse);
+      } else {
+        console.log('Ошибка базы данных');
+      }
+    },
     HOLLOW_SHOW_ACT(context) {
       context.commit('HOLLOW_SHOW');
     },
@@ -183,9 +195,12 @@ export default new Vuex.Store({
     },
     BERNARD_SHOW_ACT({ commit }) {
       commit('BERNARD_SHOW');
-    },
+    }
   },
   getters: {
+    GAME_DATA_STATE(state) {
+      return state.gameData;
+    },
     HOLLOW_SHOW_STATE(state) {
       return state.isShowPlace.isShowHollow;
     },

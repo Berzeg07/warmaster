@@ -64,17 +64,18 @@ import finalScene from "@/assets/img/bg-main.jpg";
 
 
 // Миксины *
-import { findWithKey, questAddList, sceneRender } from '@/mixins/mixins';
+import { findWithKey, questAddList, sceneRender, dataResponse, updateDB } from '@/mixins/mixins';
 
 // Vuex *
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'DialogueScene',
-    mixins: [findWithKey, questAddList, sceneRender],
+    mixins: [findWithKey, questAddList, sceneRender, dataResponse, updateDB],
 
     data() {
         return {
+            gameData: {},
             messWindow: '',
             gameSceneCurrent: '',
             currentCharacter: '',
@@ -86,7 +87,6 @@ export default {
             answearsNPC: {},
             heroActions: [],
             shop: [],
-            gameData: {},
             questAdd: {},
             gameProgressPoint: [],
             newDialogueBranches: '',
@@ -109,25 +109,22 @@ export default {
         }
     },
     mounted() {
-        if (localStorage.getItem('gameData') != null) {
-            // Получаем данные *
-            var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
-            // Записвыаем данные с сервера в data *
-            this.gameData = gameDataResponse;
-            // Текущая игровая сцена (объект персонажа в charactersNPC)*
-            this.gameSceneCurrent = this.gameData.gameSceneCurrent;
-            // Объект текущего персонажа сцены *
-            this.currentCharacter = this.gameData.charactersNPC[this.gameSceneCurrent];
-            // Раскидываем данные для вывода по переменным *
-            this.updateData();
-        }
+        // Запрос БД *
+        this.dataResponse();
+        // Текущая сцена *
+        this.gameSceneCurrent = this.gameData.gameSceneCurrent;
+        // Объект текущего персонажа сцены *
+        this.currentCharacter = this.gameData.charactersNPC[this.gameSceneCurrent];
+        // Раскидываем данные для вывода по переменным *
+        this.updateData();
     },
     computed: {
         ...mapGetters([
             'MODAL_SHOW_STATE',
             'HEROHOUSE_SHOW_STATE',
             'ANDREAS_TRAIN_STATE',
-            'HOLLOW_SHOW_STATE'
+            'HOLLOW_SHOW_STATE',
+            'GAME_DATA_STATE'
         ]),
         sceneData() {
             // Фоновая картинки сцены * 
@@ -136,6 +133,7 @@ export default {
     },
     methods: {
         ...mapActions([
+            'GAME_DATA_ACT',
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',
             'OVERLAY_HIDE_ACT',
@@ -295,8 +293,9 @@ export default {
                 this.gameData.charactersNPC[this.gameSceneCurrent].dialogueLevel = currentDialogueLevel;
             }
             this.gameData.gameSceneCurrent = null;
-            var serialDataBase = JSON.stringify(this.gameData);
-            localStorage.setItem("gameData", serialDataBase);
+            this.updateDB();
+            // var serialDataBase = JSON.stringify(this.gameData);
+            // localStorage.setItem("gameData", serialDataBase);
             // console.log(currentDialogueLevel)
             this.OVERLAY_HIDE_ACT();
             this.MODAL_SHOW_ACT();
@@ -481,23 +480,6 @@ export default {
 </script>
 
 <style scoped>
-/* .modal-loc {
-    width: 900px;
-    height: 600px;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border: 1px solid white;
-    -webkit-box-shadow: 0 0 5px 0 white;
-    -moz-box-shadow: 0 0 5px 0 white;
-    box-shadow: 0 0 5px 0 white;
-    border-radius: 10px;
-    z-index: 20;
-    display: none;
-    overflow: hidden;
-} */
-
 .btn-block {
     border-top: 1px solid white;
     padding: 10px 0 5px;

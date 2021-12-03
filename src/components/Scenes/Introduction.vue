@@ -16,10 +16,14 @@
 <script>
 import Button from '@/components/Buttons/Button.vue';
 import image from "@/assets/img/bg-main.jpg";
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
+// Миксины *
+import { dataResponse, updateDB } from '@/mixins/mixins';
 
 export default {
     name: 'Introducion',
+    mixins: [dataResponse, updateDB],
     components: {
         Button
     },
@@ -31,21 +35,24 @@ export default {
     },
     mounted() {
         // Получаем данные с сервера *
-        var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
-        this.gameData = gameDataResponse;
+        this.dataResponse();
+    },
+    computed: {
+        ...mapGetters([
+            'GAME_DATA_STATE'
+        ]),
     },
     methods: {
         ...mapActions([
-            // 'RUNOLV_SCENE_ACT',
+            'GAME_DATA_ACT',
             'MODAL_SHOW_ACT'
         ]),
         btnClick() {
             // Переход на сцену с Магом, сохранение данных в базе *
-            // this.RUNOLV_SCENE_ACT();
             this.MODAL_SHOW_ACT();
             this.gameData.gameSceneCurrent = 'runolv';
-            var serialDataBase = JSON.stringify(this.gameData);
-            localStorage.setItem("gameData", serialDataBase);
+
+            this.updateDB()
 
             // Передача родителю события на закрытие вступительного окна *
             this.$emit('hideIntro', {

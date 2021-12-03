@@ -12,6 +12,25 @@ export const findWithKey = {
     }
 }
 
+// Запрос данных с БД *
+export const dataResponse = {
+    methods: {
+        dataResponse() {
+            this.GAME_DATA_ACT();
+            this.gameData = this.GAME_DATA_STATE;
+        }
+    }
+}
+
+// Запись данных в БД *
+export const updateDB = {
+    methods: {
+        updateDB() {
+            localStorage.setItem("gameData", JSON.stringify(this.gameData));
+        }
+    }
+}
+
 // Вывод сцены *
 export const sceneRender = {
     methods: {

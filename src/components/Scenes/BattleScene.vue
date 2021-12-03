@@ -104,27 +104,24 @@ import ork from "@/assets/img/orc.png";
 // Vuex *
 import { mapActions, mapGetters, } from 'vuex';
 // Миксины *
-import { findWithKey } from '@/mixins/mixins';
+import { findWithKey, dataResponse, updateDB } from '@/mixins/mixins';
 
 export default {
     name: 'BattleScene',
-    mixins: [findWithKey],
+    mixins: [findWithKey, dataResponse, updateDB],
     components: {
         Button,
         Hero
     },
     mounted() {
-        if (localStorage.getItem('gameData') != null) {
-            var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
-            this.gameData = gameDataResponse;
-            this.heroData = gameDataResponse.hero;
-            this.heroDamage = this.heroData.heroDamage + this.heroData.weaponDamage;
-            this.heroHP = this.heroData.heroHP;
-            this.enemy = this.gameData.enemy;
-            this.currentEnemy = this.enemy[this.gameData.currentEnemy];
-            if (this.ENEMY_STATE == false) {
-                this.ENEMY_UPDATE_ACT(this.gameData.currentEnemy);
-            }
+        this.dataResponse();
+        this.heroData = this.gameData.hero;
+        this.heroDamage = this.heroData.heroDamage + this.heroData.weaponDamage;
+        this.heroHP = this.heroData.heroHP;
+        this.enemy = this.gameData.enemy;
+        this.currentEnemy = this.enemy[this.gameData.currentEnemy];
+        if (this.ENEMY_STATE == false) {
+            this.ENEMY_UPDATE_ACT(this.gameData.currentEnemy);
         }
     },
     data() {
@@ -160,6 +157,7 @@ export default {
     computed: {
         ...mapGetters([
             'ENEMY_STATE',
+            'GAME_DATA_STATE'
         ]),
     },
     methods: {
@@ -170,7 +168,8 @@ export default {
             'ENEMY_UPDATE_ACT',
             'HERO_HP_UPDATE_ACT',
             'HERO_GOLD_UPDATE_ACT',
-            'FRIDRICKFARM_INNER_SHOW_ACT'
+            'FRIDRICKFARM_INNER_SHOW_ACT',
+            'GAME_DATA_ACT'
         ]),
         critChance() {
             var rand = 1 - 0.5 + Math.random() * (100 - 1 + 1)
@@ -181,8 +180,11 @@ export default {
             this.gameData.gameFightScene = false;
             this.currentEnemy.hitPoint = 100;
             this.gameData.hero.heroHP = this.heroHP;
-            var serialDataBase = JSON.stringify(this.gameData);
-            localStorage.setItem("gameData", serialDataBase);
+
+            this.updateDB();
+            // var serialDataBase = JSON.stringify(this.gameData);
+            // localStorage.setItem("gameData", serialDataBase);
+
             this.OVERLAY_HIDE_ACT();
             this.BATTLE_ACT();
             this.HERO_HP_UPDATE_ACT(this.heroHP);

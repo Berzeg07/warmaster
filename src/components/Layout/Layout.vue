@@ -31,9 +31,6 @@
 </template>
 
 <script>
-// Стартовый объект базы данных *
-import { dataBase } from '@/database/database';
-
 // Объекты на карте *
 import NorthForest from '@/components/MapPlaces/NorthForest.vue';
 import MageHouse from '@/components/MapPlaces/MageHouse.vue';
@@ -68,9 +65,13 @@ import backgroundMap from "@/assets/img/map.png";
 
 // Vuex *
 import { mapGetters, mapActions } from 'vuex'
+// Миксины *
+import { dataResponse } from '@/mixins/mixins';
 
 export default {
     name: 'layout',
+    mixins: [dataResponse],
+
     components: {
         NorthForest,
         HeroBack,
@@ -91,6 +92,7 @@ export default {
     },
     data() {
         return {
+            gameData: {},
             modalShow: 'modalshow',
             // Изначально true !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             isShowIntro: true,
@@ -99,41 +101,33 @@ export default {
         };
     },
     mounted() {
-        // Очистка базы для отладки **************** !!!
-        // localStorage.clear();
-
-        // Запись в locale storage первичной структуры базы данных *
-        if (localStorage.getItem('gameData') == null) {
-            var serialDataBase = JSON.stringify(dataBase);
-            localStorage.setItem("gameData", serialDataBase);
-        }
         // Получаем данные *
-        var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+        this.dataResponse();
         // Проверка на стартовый экран и состояние текущей сцены *
-        if (gameDataResponse.gameSceneCurrent != 'intro') {
+        if (this.gameData.gameSceneCurrent != 'intro') {
             this.isShowIntro = false;
             this.OVERLAY_HIDE_ACT();
-            if (gameDataResponse.gameSceneCurrent) {
+            if (this.gameData.gameSceneCurrent) {
                 if (!this.MODAL_SHOW_STATE) {
                     this.OVERLAY_SHOW_ACT();
                     this.MODAL_SHOW_ACT();
                 }
             }
         }
-        if (gameDataResponse.shopShow) {
+        if (this.gameData.shopShow) {
             if (this.SHOP_SHOW_STATE == false) {
                 this.OVERLAY_SHOW_ACT();
                 this.SHOP_SHOW_ACT();
             }
         }
-        if (gameDataResponse.gameFightScene) {
+        if (this.gameData.gameFightScene) {
             if (this.BATTLE_STATE == false) {
                 this.OVERLAY_SHOW_ACT();
                 this.BATTLE_ACT();
             }
         }
         // Проверка на доступность локации Фридрика *
-        if (gameDataResponse.gameProgress.isShowFarm) {
+        if (this.gameData.gameProgress.isShowFarm) {
             this.FRIDRICKFARM_SHOW_ACT();
         }
     },
@@ -145,7 +139,8 @@ export default {
             'QUEST_LIST_STATE',
             'FRIDRICKFARM_SHOW_STATE',
             'INVENTORY_TOGGLE_STATE',
-            'BATTLE_STATE'
+            'BATTLE_STATE',
+            'GAME_DATA_STATE'
         ]),
         checkShopState() {
             return this.SHOP_SHOW_STATE == true ? this.modalShow : '';
@@ -166,6 +161,7 @@ export default {
     },
     methods: {
         ...mapActions([
+            'GAME_DATA_ACT',
             'OVERLAY_HIDE_ACT',
             'OVERLAY_SHOW_ACT',
             'MODAL_SHOW_ACT',

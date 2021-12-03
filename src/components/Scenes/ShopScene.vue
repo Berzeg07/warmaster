@@ -87,23 +87,27 @@ import Button from '@/components/Buttons/Button.vue';
 // Vuex *
 import { mapGetters, mapActions } from 'vuex';
 // Миксины *
-import { findWithKey } from '@/mixins/mixins';
+import { findWithKey, dataResponse, updateDB } from '@/mixins/mixins';
 
 
 export default {
     name: 'Shop',
-    mixins: [findWithKey],
+    mixins: [findWithKey, dataResponse, updateDB],
     components: {
         Button,
     },
     mounted() {
-        if (localStorage.getItem('gameData') != null) {
-            var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
-            this.gameData = gameDataResponse;
-            this.shop = gameDataResponse.shop;
-            this.heroItems = gameDataResponse.hero.inventory;
-            this.HERO_GOLD_UPDATE_ACT(this.gameData.hero.heroGold);
-        }
+        this.dataResponse();
+        this.shop = this.gameData.shop;
+        this.heroItems = this.gameData.hero.inventory;
+        this.HERO_GOLD_UPDATE_ACT(this.gameData.hero.heroGold);
+        // if (localStorage.getItem('gameData') != null) {
+        //     var gameDataResponse = JSON.parse(localStorage.getItem("gameData"));
+        //     this.gameData = gameDataResponse;
+        //     this.shop = gameDataResponse.shop;
+        //     this.heroItems = gameDataResponse.hero.inventory;
+        //     this.HERO_GOLD_UPDATE_ACT(this.gameData.hero.heroGold);
+        // }
     },
     data() {
         return {
@@ -118,6 +122,7 @@ export default {
     },
     computed: {
         ...mapGetters([
+            'GAME_DATA_STATE',
             'HERO_GOLD_STATE',
             'HERO_DAMAGE_STATE',
             'HERO_WEAPON_STATE',
@@ -130,6 +135,7 @@ export default {
     },
     methods: {
         ...mapActions([
+            'GAME_DATA_ACT',
             'OVERLAY_SHOW_ACT',
             'HERO_GOLD_UPDATE_ACT',
             'HERO_DAMAGE_UPDATE_ACT',
@@ -175,7 +181,8 @@ export default {
                             this.gameData.hero.heroArmor = 0;
                         }
                     }
-                    localStorage.setItem("gameData", JSON.stringify(this.gameData));
+                    // localStorage.setItem("gameData", JSON.stringify(this.gameData));
+                    this.updateDB();
                 }
             }
         },
@@ -207,7 +214,8 @@ export default {
                         this.heroItems.push(clone);
                         this.gameData.hero.inventory = this.heroItems;
                     }
-                    localStorage.setItem("gameData", JSON.stringify(this.gameData));
+                    // localStorage.setItem("gameData", JSON.stringify(this.gameData));
+                    this.updateDB();
                 }
             }
         }
